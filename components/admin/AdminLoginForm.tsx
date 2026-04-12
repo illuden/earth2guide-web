@@ -25,8 +25,8 @@ export function AdminLoginForm() {
       return
     }
 
-    router.push('/admin/posts')
-    router.refresh()
+    // 세션 쿠키가 미들웨어에서 인식되도록 풀 리로드
+    window.location.href = '/admin/posts'
   }
 
   return (
