@@ -7,10 +7,34 @@
   },
   "home": {
     "title": "Earth2Guide",
-    "subtitle": "Earth 2 元宇宙信息中心"
+    "subtitle": "Earth 2 元宇宙信息中心",
+    "latestNews": "最新资讯",
+    "viewAll": "查看更多",
+    "officialSection": "Earth 2 官方",
+    "wikiSection": "元宇宙知识库",
+    "wikiDesc": "提供理解复杂 Earth 2 世界的必备指南和技术分析数据。",
+    "searchPlaceholder": "搜索资讯、百科、公告..."
   },
   "referral": {
     "earth2": "注册 Earth 2 时输入推荐码 00000 → 享受 7.5% 折扣",
     "cta": "立即开始"
+  },
+  "search": {
+    "placeholder": "请输入搜索词...",
+    "title": "搜索",
+    "results": "搜索结果",
+    "noResults": "没有搜索结果",
+    "noResultsDesc": "请尝试其他关键词。"
+  },
+  "wiki": {
+    "title": "百科",
+    "subtitle": "Earth 2 元宇宙完整指南",
+    "categories": {
+      "account": "账户",
+      "essence": "Essence",
+      "jewel": "Jewel",
+      "raid": "Raid",
+      "general": "一般"
+    }
   }
 }

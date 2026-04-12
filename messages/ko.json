@@ -7,10 +7,34 @@
   },
   "home": {
     "title": "Earth2Guide",
-    "subtitle": "Earth 2 메타버스 정보 허브"
+    "subtitle": "Earth 2 메타버스 정보 허브",
+    "latestNews": "최신 뉴스",
+    "viewAll": "더보기",
+    "officialSection": "Earth 2 Official",
+    "wikiSection": "메타버스 지식 베이스",
+    "wikiDesc": "복잡한 Earth 2의 세계를 이해하기 위한 필수 가이드라인과 기술적 분석 데이터를 제공합니다.",
+    "searchPlaceholder": "뉴스, 위키, 공지 검색..."
   },
   "referral": {
     "earth2": "Earth 2 가입 시 리퍼럴 코드 00000 입력 → 7.5% 할인",
     "cta": "지금 시작하기"
+  },
+  "search": {
+    "placeholder": "검색어를 입력하세요...",
+    "title": "검색",
+    "results": "검색 결과",
+    "noResults": "검색 결과가 없습니다",
+    "noResultsDesc": "다른 키워드로 검색해 보세요."
+  },
+  "wiki": {
+    "title": "위키",
+    "subtitle": "Earth 2 메타버스 완전 가이드",
+    "categories": {
+      "account": "계정",
+      "essence": "Essence",
+      "jewel": "Jewel",
+      "raid": "Raid",
+      "general": "일반"
+    }
   }
 }
