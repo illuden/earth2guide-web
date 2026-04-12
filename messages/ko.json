@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "news": "소식",
+    "official": "Earth 2 Official",
+    "wiki": "위키",
+    "search": "검색"
+  },
+  "home": {
+    "title": "Earth2Guide",
+    "subtitle": "Earth 2 메타버스 정보 허브"
+  },
+  "referral": {
+    "earth2": "Earth 2 가입 시 리퍼럴 코드 00000 입력 → 7.5% 할인",
+    "cta": "지금 시작하기"
+  }
+}

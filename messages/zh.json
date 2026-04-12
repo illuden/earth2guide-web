@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "news": "资讯",
+    "official": "Earth 2 官方",
+    "wiki": "百科",
+    "search": "搜索"
+  },
+  "home": {
+    "title": "Earth2Guide",
+    "subtitle": "Earth 2 元宇宙信息中心"
+  },
+  "referral": {
+    "earth2": "注册 Earth 2 时输入推荐码 00000 → 享受 7.5% 折扣",
+    "cta": "立即开始"
+  }
+}
