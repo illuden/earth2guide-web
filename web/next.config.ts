@@ -9,7 +9,7 @@ import type { NextConfig } from "next";
  * GSC indexed URL이 끊기지 않도록 308 (영구 리다이렉트) 처리.
  *
  * Source:
- *   - pipeline/Legacy/2.WordPress.2026-04-12.xml (40 published)
+ *   - pipeline/Legacy/2.WordPress.2026-04-12.xml (40 published, 166 tags)
  *   - pipeline/docs/SEO_REDIRECT_MAP.md
  *   - pipeline/docs/seo_redirects.json
  *
@@ -18,6 +18,7 @@ import type { NextConfig } from "next";
  *   - direct match (slug 동일): 8개
  *   - 의미 매칭: /2fa-korean → /ko/wiki/manage-2fa 등
  *   - 월별 공지 / 트위터 시리즈: /ko/official 목록으로
+ *   - WP 자동 생성 (tag/author/page/date): wildcard로 /ko/news
  */
 
 const PERM = true;
@@ -153,6 +154,32 @@ const nextConfig: NextConfig = {
     rules.push({ source: "/how-to", destination: "/ko/wiki/overview", permanent: PERM });
     rules.push({ source: "/how-to/:cat", destination: "/ko/wiki/overview", permanent: PERM });
     rules.push({ source: "/how-to/:cat/:slug", destination: "/ko/wiki/:slug", permanent: PERM });
+
+    // WP tag pages (166 tags, 120 Korean encoded) -> news list
+    rules.push({ source: "/tag/:slug*", destination: "/ko/news", permanent: PERM });
+    rules.push({ source: "/ko/tag/:slug*", destination: "/ko/news", permanent: PERM });
+    rules.push({ source: "/zh/tag/:slug*", destination: "/zh/news", permanent: PERM });
+
+    // WP author pages
+    rules.push({ source: "/author/:name*", destination: "/ko/news", permanent: PERM });
+    rules.push({ source: "/ko/author/:name*", destination: "/ko/news", permanent: PERM });
+    rules.push({ source: "/zh/author/:name*", destination: "/zh/news", permanent: PERM });
+
+    // WP pagination (/page/2 etc)
+    rules.push({ source: "/page/:n", destination: "/ko/news", permanent: PERM });
+
+    // WP date archives (/2021/, /2021/05/, /2021/05/15/)
+    rules.push({ source: "/:year(20[0-9]{2})", destination: "/ko/news", permanent: PERM });
+    rules.push({ source: "/:year(20[0-9]{2})/:month(0[1-9]|1[0-2])", destination: "/ko/news", permanent: PERM });
+    rules.push({ source: "/:year(20[0-9]{2})/:month(0[1-9]|1[0-2])/:day(0[1-9]|[12][0-9]|3[01])", destination: "/ko/news", permanent: PERM });
+
+    // WP search (?s=keyword)
+    rules.push({
+      source: "/",
+      has: [{ type: "query", key: "s" }],
+      destination: "/ko/search",
+      permanent: PERM,
+    });
 
     return rules;
   },

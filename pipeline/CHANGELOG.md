@@ -1,5 +1,30 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-04-26 (세션 9 hotfix) — WP 자동 생성 URL 추가 redirect (태그 166개 등)
+
+### 발견
+- 사용자가 site:earth2guide.com 검색 중 `https://earth2guide.com/ko/tag/유동성` 발견 → 404.
+- WP XML 재분석: **태그 166개** (120개 한글 인코딩 슬러그). 게시글에 사용된 태그 150개.
+- 다른 자동 생성 패턴 누락 확인: /author/*, /page/N, /YYYY/MM/DD, ?s= 등.
+
+### 추가 redirect (web/next.config.ts)
+- `/tag/:slug*`, `/ko/tag/:slug*`, `/zh/tag/:slug*` → `/ko/news` (or `/zh/news`)
+- `/author/:name*`, `/ko/author/*`, `/zh/author/*` → `/ko/news`
+- `/page/:n` (페이지네이션) → `/ko/news`
+- `/YYYY`, `/YYYY/MM`, `/YYYY/MM/DD` (날짜 아카이브) → `/ko/news`
+- `/?s=keyword` (WP 검색) → `/ko/search`
+
+### 영향
+- 166개 태그 페이지 + N개 자동 생성 페이지의 SEO juice 보존
+- 사용자 손실 위험 감소
+- next.config.ts에 12개 rule 추가
+
+### 검증
+- tsc 통과
+- 다음 push 후 라이브 검증: `/ko/tag/유동성` → `/ko/news` 308 예상
+
+---
+
 ## 2026-04-26 (세션 9 후속) — Twitter/Discord 자동화 파이프라인 설계 + Discord 아카이브 저작권 결정
 
 ### 배경
