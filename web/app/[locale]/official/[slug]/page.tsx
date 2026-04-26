@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { getPostBySlug, getAllPostSlugs } from '@/lib/supabase/queries'
+import { routing } from '@/i18n/routing'
 import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
 import { OriginalTextBlock } from '@/components/post/OriginalTextBlock'
@@ -16,7 +17,10 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const slugs = await getAllPostSlugs()
-  return slugs.map((slug) => ({ slug }))
+  // [locale] × [slug] 카르테시안 — Next.js 16은 모든 dynamic segment 명시 요구
+  return routing.locales.flatMap((locale) =>
+    slugs.map((slug) => ({ locale, slug }))
+  )
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

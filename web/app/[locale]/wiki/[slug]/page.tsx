@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { getWikiBySlug, getWikiPages, getAllWikiSlugs } from '@/lib/supabase/queries'
+import { routing } from '@/i18n/routing'
 import { WikiSidebar } from '@/components/wiki/WikiSidebar'
 import { WikiCategoryDropdown } from '@/components/wiki/WikiCategoryDropdown'
 import { WikiContent } from '@/components/wiki/WikiContent'
@@ -14,7 +15,10 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const slugs = await getAllWikiSlugs()
-  return slugs.map((slug) => ({ slug }))
+  // [locale] × [slug] 카르테시안 — Next.js 16은 모든 dynamic segment 명시 요구
+  return routing.locales.flatMap((locale) =>
+    slugs.map((slug) => ({ locale, slug }))
+  )
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
