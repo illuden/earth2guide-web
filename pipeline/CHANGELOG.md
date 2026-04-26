@@ -1,5 +1,28 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-04-26 (밤) — 표 누락 32개 글 일괄 복구 (4단계 파이프라인)
+
+### 의도
+- audit 결과 32개 글에서 표 100% 누락 확인 (KO+ZH 양쪽). 원인은 step3/step4의 `html_to_text_with_placeholders`가 BeautifulSoup으로 텍스트 추출 시 `<table>`을 무시한 것.
+- 본문은 이미 번역됐으니 다시 번역 안 함. **표만** 추출 → 셀 번역 → 본문에 끼워넣기.
+
+### 4단계 파이프라인 (체크포인트 기반)
+1. **Phase 1** (`pipeline/phase1_extract_tables.py`) — 영문 HTML에서 표 + 컨텍스트(직전 H2/H3, caption) 추출 → `pipeline/checkpoint/{slug}.tables.en.json`. API 0회.
+2. **Phase 2** (`pipeline/phase2_translate_cells.py`) — 표 셀만 Gemini 번역 (KO + ZH). 이름/날짜/숫자/링크/Earth 2 용어 영문 그대로. 배치 단위 부분 체크포인트 (망가져도 재개). 결과: `{slug}.tables.{lang}.json`.
+3. **Phase 3** (`pipeline/phase3_reassemble.py`) — DB body_{lang} 가져옴 → footer ("관련 기사", "커뮤니티에 참여하세요") 분리 → main에서 N번째 H2 다음 위치에 표 삽입. 영문 H2 개수 == KO/ZH main H2 개수 검증. 결과: `{slug}.{lang}.body.txt`.
+4. **Phase 4** (`pipeline/phase4_patch_db.py`) — 조립된 body로 Supabase PATCH. body_{lang}만 갱신, status/source 등 보존.
+
+### 결과
+- 32 슬러그 × 2 언어 = **64건 PATCH 성공**
+- audit 재실행: `total_with_tables: 32, ko_missing: 0, zh_missing: 0, both_ok: 32`
+- API 비용: 본문 안 다시 번역해서 retranslate 방식 대비 1/3 이하
+- 본문 일관성: 기존 번역 유지, 표만 추가
+
+### 진단 발견
+- step3/step4의 `html_to_text_with_placeholders`가 `<table>`/`<figure.wp-block-table>` 무시. **다음 스크래핑 시 step3/step4 프롬프트 + 추출 함수에 표 처리 추가 필요** (별도 작업).
+
+---
+
 ## 2026-04-26 (저녁) — UX 픽스: OriginalTextBlock 제거 + Referral 배너 갱신 + 테이블 스타일 보강
 
 ### 의도
