@@ -84,7 +84,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
       {/* 본문 */}
       {post.body ? (
-        <PostBody html={post.body} />
+        <PostBody markdown={post.body} />
       ) : post.summary ? (
         <p className="text-[#bbc9cf] leading-relaxed">{post.summary}</p>
       ) : null}

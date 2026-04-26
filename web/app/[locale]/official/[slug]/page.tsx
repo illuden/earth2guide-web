@@ -75,7 +75,7 @@ export default async function OfficialDetailPage({ params }: PageProps) {
       )}
 
       {post.body ? (
-        <PostBody html={post.body} />
+        <PostBody markdown={post.body} />
       ) : post.summary ? (
         <p className="text-[#bbc9cf] leading-relaxed">{post.summary}</p>
       ) : null}
