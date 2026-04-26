@@ -8,6 +8,7 @@ import { WikiCategoryDropdown } from '@/components/wiki/WikiCategoryDropdown'
 import { WikiContent } from '@/components/wiki/WikiContent'
 
 export const revalidate = 3600
+export const dynamicParams = true   // 빌드 후 추가된 slug도 ISR로 처리
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -62,7 +63,7 @@ export default async function WikiDetailPage({ params }: PageProps) {
 
           {/* 본문 */}
           {page.body ? (
-            <WikiContent html={page.body} />
+            <WikiContent body={page.body} />
           ) : (
             <p className="text-[#bbc9cf] leading-relaxed">(콘텐츠 준비 중)</p>
           )}
