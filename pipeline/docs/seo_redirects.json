@@ -1,0 +1,378 @@
+{
+  "posts": [
+    {
+      "src_path": "/",
+      "src_slug": "home",
+      "title": "Main",
+      "target_relative": "/",
+      "kind": "home"
+    },
+    {
+      "src_path": "/%ec%96%b4%ec%8a%a42-%ea%b3%b5%ec%8b%9d-2020%eb%85%84-12%ec%9b%94-%ea%b3%b5%ec%a7%80%ec%82%ac%ed%95%ad/",
+      "src_slug": "%ec%96%b4%ec%8a%a42-%ea%b3%b5%ec%8b%9d-2020%eb%85%84-12%ec%9b%94-%ea%b3%b5%ec%a7%80%ec%82%ac%ed%95%ad",
+      "title": "[어스2 공식] 2020년 12월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-01/",
+      "src_slug": "2021-01",
+      "title": "[Earth 2 Official] 어스2 2021년 01월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-02/",
+      "src_slug": "2021-02",
+      "title": "[Earth 2 Official] 어스2 2021년 02월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/register-korean/",
+      "src_slug": "register-korean",
+      "title": "어스2 가입하기",
+      "target_relative": "/wiki/create-your-account",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/add-credit-korean/",
+      "src_slug": "add-credit-korean",
+      "title": "어스2 크레딧 충전하기",
+      "target_relative": "/wiki/account-balance-and-withdrawals",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2fa-korean/",
+      "src_slug": "2fa-korean",
+      "title": "어스2 2FA 설정하는 법",
+      "target_relative": "/wiki/manage-2fa",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-03/",
+      "src_slug": "2021-03",
+      "title": "[Earth 2 Official] 어스2 2021년 03월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/withdrawal-korean/",
+      "src_slug": "withdrawal-korean",
+      "title": "어스2 출금하는 법",
+      "target_relative": "/wiki/account-balance-and-withdrawals",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-04/",
+      "src_slug": "2021-04",
+      "title": "[Earth 2 Official] 어스2 2021년 04월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-05/",
+      "src_slug": "2021-05",
+      "title": "[Earth 2 Official] 어스2 2021년 05월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-06/",
+      "src_slug": "2021-06",
+      "title": "[Earth 2 Official] 어스2 2021년 06월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-07/",
+      "src_slug": "2021-07",
+      "title": "[Earth 2 Official] 어스2 2021년 07월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2021-08/",
+      "src_slug": "2021-08",
+      "title": "[Earth 2 Official] 어스2 2021년 08월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/epls-introduction-and-setup/",
+      "src_slug": "epls-introduction-and-setup",
+      "title": "EPL 소개 및 설정방법",
+      "target_relative": "/wiki/epl",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/%ed%83%80%ec%9d%bc%ea%b5%ac%eb%a7%a4-%ec%a0%84%eb%9e%b5/",
+      "src_slug": "%ed%83%80%ec%9d%bc%ea%b5%ac%eb%a7%a4-%ec%a0%84%eb%9e%b5",
+      "title": "타일구매 전략",
+      "target_relative": "/wiki/buy-new-land",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-03/",
+      "src_slug": "twitter-2021-03",
+      "title": "[Shane Twitter] 2021년 03월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-04/",
+      "src_slug": "twitter-2021-04",
+      "title": "[Shane Twitter] 2021년 04월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-05/",
+      "src_slug": "twitter-2021-05",
+      "title": "[Shane Twitter] 2021년 05월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-06/",
+      "src_slug": "twitter-2021-06",
+      "title": "[Shane Twitter] 2021년 06월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-07/",
+      "src_slug": "twitter-2021-07",
+      "title": "[Shane Twitter] 2021년 07월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-08/",
+      "src_slug": "twitter-2021-08",
+      "title": "[Shane Twitter] 2021년 08월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-09/",
+      "src_slug": "twitter-2021-09",
+      "title": "[Shane Twitter] 2021년 09월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/twitter-2021-10/",
+      "src_slug": "twitter-2021-10",
+      "title": "[Shane Twitter] 2021년 10월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/create-your-account/",
+      "src_slug": "create-your-account",
+      "title": "계정 생성하기",
+      "target_relative": "/wiki/create-your-account",
+      "kind": "wiki(direct)"
+    },
+    {
+      "src_path": "/twitter-2021-02/",
+      "src_slug": "twitter-2021-02",
+      "title": "[Shane Twitter] 2021년 02월 쉐인 트위터",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/manage-2fa/",
+      "src_slug": "manage-2fa",
+      "title": "2FA(이중보안)관리하기",
+      "target_relative": "/wiki/manage-2fa",
+      "kind": "wiki(direct)"
+    },
+    {
+      "src_path": "/account-balances-and-withdrawals/",
+      "src_slug": "account-balances-and-withdrawals",
+      "title": "계정 잔고 및 출금",
+      "target_relative": "/wiki/account-balance-and-withdrawals",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/israel/",
+      "src_slug": "israel",
+      "title": "어스2 이스라엘 오픈",
+      "target_relative": "/news",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/2020-12/",
+      "src_slug": "2020-12",
+      "title": "[Earth 2 Official] 어스2 2020년 12월 공지사항",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/customize-your-account/",
+      "src_slug": "customize-your-account",
+      "title": "계정 커스터마이징",
+      "target_relative": "/wiki/customize-your-account",
+      "kind": "wiki(direct)"
+    },
+    {
+      "src_path": "/edc/",
+      "src_slug": "edc",
+      "title": "1티어 프로퍼티&amp;에센스 분배서약",
+      "target_relative": "/wiki/tier-1-properties-and-bonus-essence",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/retrospective-reward-for-earth-2-land-owners/",
+      "src_slug": "retrospective-reward-for-earth-2-land-owners",
+      "title": "공지 &amp; 어스2 토지 소유자 에센스 소급적용",
+      "target_relative": "/official/retrospective-reward-for-earth-2-land-owners",
+      "kind": "post(direct)"
+    },
+    {
+      "src_path": "/earth-2-announces-acquisition-of-3d-fast-paced-sci-fi-vehicular-combat-game-drone/",
+      "src_slug": "earth-2-announces-acquisition-of-3d-fast-paced-sci-fi-vehicular-combat-game-drone",
+      "title": "어스의 DRONE 인수(3D PvP 게임)",
+      "target_relative": "/official/earth-2-announces-acquisition-of-3d-fast-paced-sci-fi-vehicular-combat-game-drone",
+      "kind": "post(direct)"
+    },
+    {
+      "src_path": "/former-senior-binance-director-omar-rahim-joins-earth-2-as-strategic-advisor/",
+      "src_slug": "former-senior-binance-director-omar-rahim-joins-earth-2-as-strategic-advisor",
+      "title": "(전)바이낸스 수석 이사 Omar Rahim 어스2에 전략기획 고문으로 참여",
+      "target_relative": "/official/former-senior-binance-director-omar-rahim-joins-earth-2-as-strategic-advisor",
+      "kind": "post(direct)"
+    },
+    {
+      "src_path": "/e2turns2/",
+      "src_slug": "e2turns2",
+      "title": "어스2의 두번째 생일을 맞이하여",
+      "target_relative": "/official/e2turns2",
+      "kind": "post(direct)"
+    },
+    {
+      "src_path": "/raiding-update/",
+      "src_slug": "raiding-update",
+      "title": "어스2 Raiding &amp; Cydroid 업데이트 + 테스트 서버에서 시작",
+      "target_relative": "/official/raiding-update",
+      "kind": "post(direct)"
+    },
+    {
+      "src_path": "/earth2_sourceofwealth_kyc/",
+      "src_slug": "earth2_sourceofwealth_kyc",
+      "title": "[230721] 어스2 자금출처 조사 대응",
+      "target_relative": "/official",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/%ec%96%b4%ec%8a%a42-pre-alpha-%ed%85%8c%ec%8a%a4%ed%84%b0-%ec%8b%a0%ec%b2%ad-%ec%96%91%ec%8b%9d-%ec%9e%91%ec%84%b1%eb%b2%95/",
+      "src_slug": "%ec%96%b4%ec%8a%a42-pre-alpha-%ed%85%8c%ec%8a%a4%ed%84%b0-%ec%8b%a0%ec%b2%ad-%ec%96%91%ec%8b%9d-%ec%9e%91%ec%84%b1%eb%b2%95",
+      "title": "어스2 Pre-Alpha 테스터 신청 양식 작성법",
+      "target_relative": "/wiki/create-your-account",
+      "kind": "manual"
+    },
+    {
+      "src_path": "/ess-pool-1/",
+      "src_slug": "ess-pool-1",
+      "title": "어스2 ESS(에센스)코인으로 유동성 제공하기 1편 - 개념설명",
+      "target_relative": "/news",
+      "kind": "manual"
+    }
+  ],
+  "categories": [
+    {
+      "src": "/category/shane-isaac",
+      "tgt": "/news",
+      "note": "Shane 카테고리 → 뉴스 목록 (Phase 3에 별도 페이지)"
+    },
+    {
+      "src": "/category/shane-isaac/x",
+      "tgt": "/news",
+      "note": "Shane Twitter → 뉴스 목록"
+    },
+    {
+      "src": "/category/shane-isaac/discord",
+      "tgt": "/news",
+      "note": "Shane Discord → 뉴스 목록"
+    },
+    {
+      "src": "/category/manual",
+      "tgt": "/wiki/overview",
+      "note": "매뉴얼 → 위키 첫 페이지"
+    },
+    {
+      "src": "/category/manual/account",
+      "tgt": "/wiki/overview",
+      "note": "account 매뉴얼 → 위키 첫 페이지"
+    },
+    {
+      "src": "/category/manual/essence",
+      "tgt": "/wiki/overview",
+      "note": "essence 매뉴얼 → 위키 첫 페이지"
+    },
+    {
+      "src": "/category/manual/jewel",
+      "tgt": "/wiki/jewels",
+      "note": "jewel 매뉴얼 → 위키 jewels"
+    },
+    {
+      "src": "/category/manual/raid",
+      "tgt": "/wiki/overview",
+      "note": "raid 매뉴얼 → 위키 첫 페이지"
+    },
+    {
+      "src": "/category/news",
+      "tgt": "/news",
+      "note": "뉴스 카테고리 → 뉴스 목록"
+    },
+    {
+      "src": "/category/news/announcement",
+      "tgt": "/official",
+      "note": "공지 카테고리 → 공식 목록"
+    },
+    {
+      "src": "/category/news/youtube",
+      "tgt": "/news",
+      "note": "youtube 카테고리 → 뉴스 목록"
+    }
+  ],
+  "system": [
+    {
+      "src": "/feed",
+      "tgt": "/sitemap.xml",
+      "note": "RSS feed → sitemap"
+    },
+    {
+      "src": "/feed/",
+      "tgt": "/sitemap.xml",
+      "note": "RSS feed → sitemap"
+    },
+    {
+      "src": "/comments/feed",
+      "tgt": "/",
+      "note": "댓글 feed → 홈"
+    },
+    {
+      "src": "/wp-content/:path*",
+      "tgt": "/",
+      "note": "WP content → 홈 (이미지는 R2)"
+    },
+    {
+      "src": "/wp-admin",
+      "tgt": "/admin",
+      "note": "WP admin → 새 admin"
+    },
+    {
+      "src": "/wp-admin/:path*",
+      "tgt": "/admin",
+      "note": "WP admin → 새 admin"
+    },
+    {
+      "src": "/wp-login.php",
+      "tgt": "/admin",
+      "note": "WP login → 새 admin"
+    }
+  ]
+}
