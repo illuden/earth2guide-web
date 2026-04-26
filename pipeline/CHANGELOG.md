@@ -1,5 +1,66 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-04-26 (세션 9) — WordPress legacy SEO 보존: 118+ redirect 규칙 추가
+
+### 의도
+- WordPress 6.9.4 시절 `earth2guide.com` (어스2 가이드, illuden@naver.com)이 GSC에 indexed 되어 있음 (2026-01-26 기준 색인 187, 비색인 113, **404 17건**, 리디렉션 포함 3건).
+- `pipeline/Legacy/2.WordPress.2026-04-12.xml` (1.8MB WP export) 분석: published post/page 40개.
+- 현재 Next.js 사이트 (posts 154 + wikis 20) 와 매핑: 직매칭 8 (wiki 3 + post 5), 수동 매핑 31, fallback 1.
+- Google에 indexed된 옛 URL이 끊기면 SEO juice 손실 → **308(영구 리다이렉트)로 새 URL에 집중**.
+
+### 매핑 원천 (검토용 + 코드용)
+- `pipeline/docs/SEO_REDIRECT_MAP.md` — 사람 검토용 마크다운 표
+- `pipeline/docs/seo_redirects.json` — 매핑 raw data
+
+### 매핑 정책 (Alvin 합의)
+- 옛 위키 카테고리 (essence/jewel/raid/general 4개 query param) → 전부 `/ko/wiki/overview`
+- 월별 공지/트위터 시리즈 (`/2021-01` ~ `/2021-08`, `/twitter-2021-XX`) 18개 → 전부 `/ko/official`
+- WP `/category/manual/raid` → `/ko/wiki/overview`
+- `/edc` (1티어 + 에센스 분배) → `/ko/wiki/tier-1-properties-and-bonus-essence`
+- `/2fa-korean` → `/ko/wiki/manage-2fa` (한국어 가이드 → 영문 위키, 의미 매칭)
+- `/register-korean` → `/ko/wiki/create-your-account`
+- `/withdrawal-korean`, `/add-credit-korean` → `/ko/wiki/account-balance-and-withdrawals`
+- `/epls-introduction-and-setup` → `/ko/wiki/epl`
+- `/category/manual/jewel` → `/ko/wiki/jewels`
+- WP 시스템 (`/feed`, `/wp-admin`, `/wp-content/*`, `/wp-login.php`) → 의미 있는 곳
+
+### 도메인 정책
+- canonical: `earth2guide.com` (non-www)
+- locale: 옛 콘텐츠가 모두 한국어였으므로 모든 redirect는 `/ko/...`로 명시
+
+### 변경 파일
+- `web/next.config.ts` — `redirects()` async 함수 추가 (118+ 규칙)
+- `pipeline/CHANGELOG.md` — 이 항목
+
+### 영향
+- 빌드/배포 영향: `web/next.config.ts`만 수정 (DB 변경 0)
+- 사용자 영향: 옛 링크 클릭해도 끊김 없이 새 페이지로 점프
+- Google 재크롤링 시 308 받고 새 URL로 색인 이동 (보통 수일~수주)
+
+### 검증
+- `npx tsc --noEmit` 통과
+- 단위 검증 (`/tmp/test_redirects.mjs`): WP_POSTS 42, WP_CATEGORIES 11, WP_SYSTEM 4 모두 인식
+- spot check 6/6 (`/2fa-korean`, `/2021-01`, `/category/manual/jewel`, `/edc`, `/wp-admin`, `/feed`)
+- 옛 위키 카테고리 query param redirect (4개) ✅
+- /how-to/:cat/:slug pattern ✅
+- trailing slash 처리 ✅
+
+### 미적용 (다음 단계)
+- canonical URL meta (`alternates.canonical`) 추가
+- `metadataBase` + default OG image
+- JSON-LD (Article schema) 주입
+- Cloudflare/Vercel www → non-www 통일 검증
+
+### 부수 작업 (이번 세션 발견 + 복구)
+- 이전 세션에서 손상된 4개 파일 (sandbox Write tool truncation 사고) 발견:
+  - `web/components/post/PostBody.tsx` (861 byte, 4834 byte로 복구)
+  - `web/components/wiki/WikiContent.tsx` (1235 byte, 4752 byte로 복구)
+  - `web/app/[locale]/wiki/page.tsx` (6032 byte 중 5600 byte NULL 패딩, 433 byte로 정상화)
+  - `web/app/[locale]/wiki/[slug]/page.tsx` (Edit tool 회귀 1회 → git restore + 재 Edit)
+- 복구 방법: python으로 강제 truncate + write (Write/Edit tool 비신뢰성 우회)
+
+---
+
 ## 2026-04-26 (밤) — 표 누락 32개 글 일괄 복구 (4단계 파이프라인)
 
 ### 의도
