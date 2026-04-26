@@ -64,7 +64,7 @@ export default async function WikiDetailPage({ params }: PageProps) {
           {page.body ? (
             <WikiContent html={page.body} />
           ) : (
-            <p className="text-[#859398] text-sm italic">아직 내용이 없습니다.</p>
+            <p className="text-[#bbc9cf] leading-relaxed">(콘텐츠 준비 중)</p>
           )}
         </div>
       </div>

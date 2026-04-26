@@ -10,17 +10,15 @@ export function Earth2ReferralBanner() {
             Exclusive Offer
           </p>
           <h3 className="text-xl lg:text-2xl font-headline font-bold text-[#dee1f7]">
-            Earth 2 가입 시 리퍼럴 코드 입력
+            Earth 2 신규 Land 구매 시 리퍼럴 코드 입력
           </h3>
           <p className="text-[#a8e8ff]/70 text-sm mt-1">
-            코드{' '}
-            <span className="font-bold text-[#00d4ff] text-base tracking-widest">00000</span>
-            {' '}입력 → 7.5% 할인 혜택
+            7.5% 할인 혜택
           </p>
         </div>
 
         <a
-          href="https://earth2.io/?r=00000"
+          href="https://app.earth2.io"
           target="_blank"
           rel="noopener noreferrer"
           className="flex-shrink-0 px-8 py-3 bg-[#00d4ff] text-[#003642] font-headline font-bold uppercase tracking-wider text-sm hover:bg-[#a8e8ff] transition-colors rounded-sm"

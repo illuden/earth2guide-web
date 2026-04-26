@@ -5,7 +5,6 @@ import { getPostBySlug, getAllPostSlugs } from '@/lib/supabase/queries'
 import { routing } from '@/i18n/routing'
 import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
-import { OriginalTextBlock } from '@/components/post/OriginalTextBlock'
 import { SourceLink } from '@/components/post/SourceLink'
 import { Earth2ReferralBanner } from '@/components/referral/Earth2ReferralBanner'
 
@@ -92,11 +91,6 @@ export default async function NewsDetailPage({ params }: PageProps) {
       ) : post.summary ? (
         <p className="text-[#bbc9cf] leading-relaxed">{post.summary}</p>
       ) : null}
-
-      {/* 원문 */}
-      {post.body_original && (
-        <OriginalTextBlock text={post.body_original} sourceUrl={post.source_url} />
-      )}
 
       {/* 리퍼럴 배너 */}
       <div className="mt-12">

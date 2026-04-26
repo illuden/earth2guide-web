@@ -5,7 +5,6 @@ import { getPostBySlug, getAllPostSlugs } from '@/lib/supabase/queries'
 import { routing } from '@/i18n/routing'
 import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
-import { OriginalTextBlock } from '@/components/post/OriginalTextBlock'
 import { SourceLink } from '@/components/post/SourceLink'
 import { Earth2ReferralBanner } from '@/components/referral/Earth2ReferralBanner'
 
@@ -83,10 +82,6 @@ export default async function OfficialDetailPage({ params }: PageProps) {
       ) : post.summary ? (
         <p className="text-[#bbc9cf] leading-relaxed">{post.summary}</p>
       ) : null}
-
-      {post.body_original && (
-        <OriginalTextBlock text={post.body_original} sourceUrl={post.source_url} />
-      )}
 
       <div className="mt-12">
         <Earth2ReferralBanner />

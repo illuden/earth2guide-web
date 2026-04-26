@@ -100,17 +100,23 @@ export function PostBody({ markdown }: PostBodyProps) {
             />
           ),
           table: ({ children }) => (
-            <div className="overflow-x-auto my-6">
-              <table className="w-full border-collapse text-sm">{children}</table>
+            <div className="overflow-x-auto my-6 -mx-6 px-6 sm:mx-0 sm:px-0 rounded-sm border border-[#3c494e]/40">
+              <table className="min-w-full w-max border-collapse text-sm">{children}</table>
             </div>
           ),
+          thead: ({ children }) => (
+            <thead className="bg-[#161b2b]">{children}</thead>
+          ),
+          tr: ({ children }) => (
+            <tr className="border-b border-[#3c494e]/40 last:border-b-0">{children}</tr>
+          ),
           th: ({ children }) => (
-            <th className="border border-[#3c494e] bg-[#161b2b] px-3 py-2 text-left text-[#dee1f7] font-semibold">
+            <th className="px-3 py-2 text-left text-[#dee1f7] font-semibold whitespace-nowrap border-r border-[#3c494e]/40 last:border-r-0">
               {children}
             </th>
           ),
           td: ({ children }) => (
-            <td className="border border-[#3c494e] px-3 py-2 text-[#bbc9cf]">
+            <td className="px-3 py-2 text-[#bbc9cf] align-top border-r border-[#3c494e]/40 last:border-r-0">
               {children}
             </td>
           ),
