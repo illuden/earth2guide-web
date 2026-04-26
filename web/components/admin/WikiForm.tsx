@@ -20,7 +20,7 @@ export function WikiForm({ initialData, onSubmit }: WikiFormProps) {
 
   const [form, setForm] = useState<WikiFormData>({
     slug: initialData?.slug ?? '',
-    category: initialData?.category ?? 'general',
+    category: initialData?.category ?? 'overview',
     title_ko: initialData?.title_ko ?? '',
     title_zh: initialData?.title_zh ?? '',
     body_ko: initialData?.body_ko ?? '',

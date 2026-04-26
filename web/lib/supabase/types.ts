@@ -13,11 +13,13 @@ export type PostCategory =
   | 'dev_qa'
 
 export type WikiCategory =
+  | 'overview'
   | 'account'
-  | 'essence'
-  | 'jewel'
-  | 'raid'
-  | 'general'
+  | 'land'
+  | 'sub-asset'
+  | 'ecosims'
+  | 'create'
+  | 'market'
 
 export type PostStatus = 'draft' | 'published' | 'archived'
 export type TranslationStatus = 'pending' | 'done' | 'failed'
@@ -164,10 +166,13 @@ export const CATEGORY_META: Record<PostCategory, { label_ko: string; label_zh: s
   dev_qa:        { label_ko: '개발자 Q&A', label_zh: '开发问答', color: 'gray'  },
 }
 
+// 키 순서 = 사이드바 표시 순서 (earth2.io/how-to 원본 순서 그대로)
 export const WIKI_CATEGORY_META: Record<WikiCategory, { label_ko: string; label_zh: string; icon: string }> = {
-  account:  { label_ko: '계정',   label_zh: '账户',     icon: 'account_circle'     },
-  essence:  { label_ko: 'Essence', label_zh: 'Essence', icon: 'energy_program_saving' },
-  jewel:    { label_ko: 'Jewel',   label_zh: 'Jewel',   icon: 'diamond'            },
-  raid:     { label_ko: 'Raid',    label_zh: 'Raid',    icon: 'swords'             },
-  general:  { label_ko: '일반',    label_zh: '一般',    icon: 'info'               },
+  overview:    { label_ko: '개요',      label_zh: '概述',      icon: 'menu_book'        },
+  account:     { label_ko: '계정',      label_zh: '账户',      icon: 'account_circle'   },
+  land:        { label_ko: '토지',      label_zh: '土地',      icon: 'public'           },
+  'sub-asset': { label_ko: 'Sub-asset', label_zh: 'Sub-asset', icon: 'diamond'          },
+  ecosims:     { label_ko: 'EcoSims',   label_zh: 'EcoSims',   icon: 'eco'              },
+  create:      { label_ko: '제작',      label_zh: '创建',      icon: 'design_services'  },
+  market:      { label_ko: '마켓',      label_zh: '市场',      icon: 'storefront'       },
 }
