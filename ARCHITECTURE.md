@@ -141,6 +141,54 @@ git push origin main
 
 ---
 
+## Next.js 16 주의사항 (실제 부딪힌 함정)
+
+> Next.js 16은 14/15와 동작이 다름. AI 에이전트가 옛 패턴 적용하면 빌드는 통과해도 런타임 500 가능.
+
+### 1. `generateStaticParams`는 모든 dynamic segment 명시 필수
+
+라우트가 `[locale]/news/[slug]`처럼 **dynamic segment 2개 이상**이면, `generateStaticParams`가 모두 반환해야 함. 하나라도 빠지면 페이지가 prerender 안 되고 런타임 매칭 실패 → 500.
+
+```ts
+// ❌ 틀림 (slug만 반환 — Next.js 14에선 통했지만 16에선 안 됨)
+export async function generateStaticParams() {
+  const slugs = await getAllPostSlugs()
+  return slugs.map((slug) => ({ slug }))
+}
+
+// ✅ 맞음 (locale × slug 카르테시안)
+import { routing } from '@/i18n/routing'
+export async function generateStaticParams() {
+  const slugs = await getAllPostSlugs()
+  return routing.locales.flatMap((locale) =>
+    slugs.map((slug) => ({ locale, slug }))
+  )
+}
+```
+
+증상: `x-matched-path: /500`, 모든 detail URL 500, 목록 페이지는 정상.
+
+### 2. params는 Promise
+
+```ts
+// ✅ 맞음
+interface PageProps { params: Promise<{ locale: string; slug: string }> }
+const { locale, slug } = await params
+```
+
+### 3. revalidate / dynamicParams 명시 권장
+
+```ts
+export const revalidate = 3600       // ISR 1시간
+export const dynamicParams = true    // 기본값이지만 명시
+```
+
+### 4. react-markdown은 server component에서 OK
+
+`'use client'` 추가 필요 없음. 단, Tailwind v4에서 `prose` 클래스는 `@tailwindcss/typography` plugin 필요 — 우리는 plugin 없이 `components` prop으로 element별 직접 스타일링.
+
+---
+
 ## 보존 용어 (번역 시 영문 유지)
 
 ```
