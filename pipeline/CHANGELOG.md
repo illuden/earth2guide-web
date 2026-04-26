@@ -19,6 +19,21 @@
 - 사용자 손실 위험 감소
 - next.config.ts에 12개 rule 추가
 
+
+### 추가 (slug 미매칭 fallback)
+- `/ko/news/[slug]`, `/ko/official/[slug]`, `/ko/wiki/[slug]`에서 DB에 slug 없으면 `notFound()` 대신 카테고리 목록으로 redirect:
+  - `/ko/news/<unknown>` → `/ko/news`
+  - `/ko/official/<unknown>` → `/ko/official`
+  - `/ko/wiki/<unknown>` → `/ko/wiki/overview`
+- `/zh/...` 동일 패턴
+- 기대 효과: 옛 URL 중 우리 매핑에 없는 것도 404 대신 카테고리 목록으로 안전 안내, SEO juice 일부 보존
+
+### 변경 파일
+- `web/next.config.ts` (12개 wildcard rule 추가)
+- `web/app/[locale]/news/[slug]/page.tsx` (notFound → redirect)
+- `web/app/[locale]/official/[slug]/page.tsx` (notFound → redirect)
+- `web/app/[locale]/wiki/[slug]/page.tsx` (notFound → redirect)
+
 ### 검증
 - tsc 통과
 - 다음 push 후 라이브 검증: `/ko/tag/유동성` → `/ko/news` 308 예상

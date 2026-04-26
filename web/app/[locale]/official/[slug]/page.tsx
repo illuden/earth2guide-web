@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { getPostBySlug, getAllPostSlugs } from '@/lib/supabase/queries'
@@ -49,7 +49,7 @@ export default async function OfficialDetailPage({ params }: PageProps) {
   const l = locale as Locale
   const post = await getPostBySlug(slug, l)
 
-  if (!post) notFound()
+  if (!post) redirect(`/${locale}/official`)
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
