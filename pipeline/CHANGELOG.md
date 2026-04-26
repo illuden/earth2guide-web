@@ -1,5 +1,76 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-04-26 (세션 9 후속) — Twitter/Discord 자동화 파이프라인 설계 + Discord 아카이브 저작권 결정
+
+### 배경
+- HANDOFF Phase 2 #2 (Discord 큐레이션) 검토.
+- pipeline/개발자_문답/, 공지사항_국문/, 공지사항_영문/ 발견 (총 7.2GB, JSON 173, 이미지 6400+).
+- 메시지 6,742개 분석.
+
+### 결정 1: Discord 아카이브 직접 사용 안 함 (저작권)
+- `open24hrs` Discord 계정 = 다른 한국 커뮤니티 관리자 (Alvin 본인 X).
+- 한국어 Q&A 정리 + Remark = 타인 저작물 → 동의 없이 재사용 불가.
+- Shane 원본 영문 발언 (스크린샷 안)만 인용 가능.
+- **결정**: 아카이브는 참고용 보관 (`pipeline/.gitignore` 그대로). 사이트 미반영.
+
+### 결정 2: Step 8 + 9 자동화 파이프라인으로 우회
+- 옛 5년치는 포기, 앞으로 Shane 원본만 직접 수집 → 자체 번역 = 100% 합법.
+- 설계 문서: `pipeline/docs/AUTOMATION_PIPELINE.md` (482 라인, 16KB).
+
+### 도구 선택 (Alvin 합의)
+| 영역 | 선택 | 이유 |
+|---|---|---|
+| Twitter 수집 | Make.com webhook | 무료 1000 ops/월, GUI |
+| Discord 수집 | Vercel cron + Discord API polling | 무료, 추가 인프라 0, 5분 폴링 |
+| Publish 정책 | draft → 수동 publish | 안전 |
+| 번역 시점 | 수집 즉시 (Gemini KO+ZH) | 검토 효율 |
+
+### 파이프라인 설계 요약
+```
+Twitter @ShaneIsaac
+  └→ Make.com 모니터링
+      └→ POST /api/webhook/twitter (Vercel Edge)
+          └→ Gemini 번역 → Supabase posts (status=draft, sub_type=twitter)
+
+Discord 공식 채널
+  └→ Vercel cron (5분) → /api/cron/discord-poll
+      └→ Discord API fetch (author=Shane filter)
+          └→ Gemini 번역 → Supabase posts (status=draft, sub_type=discord)
+
+[Alvin 검토] /admin/posts?status=draft → publish
+[/ko/news 탭 UI] 전체 / 트위터 / 디스코드 / 유튜브
+```
+
+### 비용 = $0/월
+- Make.com 무료 1000 ops, Vercel Hobby cron 무료, Gemini Free 14 RPM, Supabase Free 500MB.
+
+### DB 스키마 변경 plan (다음 세션 Phase 1)
+- `posts.sub_type` TEXT (twitter | discord | youtube | official)
+- `posts.external_id` TEXT (`twitter:xxx` | `discord:xxx` 중복 방지)
+- category에 `community` 추가
+- `web/supabase/migrations/003_add_sub_type.sql` 작성 후 Supabase SQL Editor 실행
+
+### 단계별 구현 순서 (다음 세션 7시간)
+- Phase 1: DB + 타입 (30분)
+- Phase 2: API endpoint 골격 (1시간)
+- Phase 3: Gemini 공통 함수 (1시간)
+- Phase 4: Twitter MVP (1시간) ← MVP 종료점
+- Phase 5: Discord MVP (1.5시간)
+- Phase 6: UI 탭 + Admin (1.5시간)
+- Phase 7: 운영 마무리 (30분)
+
+### MVP 권장 (3.5시간)
+Phase 1+2+3+4 만 = Twitter draft 저장 + Admin 수동 publish.
+1주 운영 검증 후 Discord/UI 추가.
+
+### 환경변수 추가 항목
+```
+WEBHOOK_SECRET, CRON_SECRET, DISCORD_BOT_TOKEN,
+DISCORD_CHANNEL_ANNOUNCEMENTS, DISCORD_CHANNEL_DEV_QA, DISCORD_SHANE_USER_ID
+```
+
+---
+
 ## 2026-04-26 (세션 9) — WordPress legacy SEO 보존: 118+ redirect 규칙 추가
 
 ### 의도
