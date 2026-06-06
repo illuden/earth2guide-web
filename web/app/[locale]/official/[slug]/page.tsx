@@ -1,7 +1,8 @@
-import { notFound, redirect } from 'next/navigation'
+import { redirect, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
-import { getPostBySlug, getAllPostSlugs } from '@/lib/supabase/queries'
+import { getPostSegment } from '@/lib/supabase/types'
+import { getPostBySlug, getAllPublishedSlugs } from '@/lib/supabase/queries'
 import { routing } from '@/i18n/routing'
 import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
@@ -15,7 +16,9 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
+  // official segment 카테고리만 prerender (news는 /news/[slug] 담당)
+  const { posts } = await getAllPublishedSlugs()
+  const slugs = posts.filter((p) => getPostSegment(p.category) === 'official').map((p) => p.slug)
   // [locale] × [slug] 카르테시안 — Next.js 16은 모든 dynamic segment 명시 요구
   return routing.locales.flatMap((locale) =>
     slugs.map((slug) => ({ locale, slug }))
@@ -29,6 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.title,
     description: post.summary ?? undefined,
+    alternates: { canonical: `/${locale}/${getPostSegment(post.category)}/${slug}` },
     openGraph: {
       title: post.title,
       description: post.summary ?? undefined,
@@ -50,6 +54,10 @@ export default async function OfficialDetailPage({ params }: PageProps) {
   const post = await getPostBySlug(slug, l)
 
   if (!post) redirect(`/${locale}/official`)
+  if (getPostSegment(post.category) === 'news') {
+    // 잘못된 segment 접근 — canonical 경로로 영구 이동 (중복 콘텐츠 방지)
+    permanentRedirect(`/${locale}/news/${post.slug}`)
+  }
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">

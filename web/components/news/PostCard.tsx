@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { PostLocalized, PostCategory } from '@/lib/supabase/types'
+import { getPostSegment } from '@/lib/supabase/types'
 import { CategoryBadge } from './CategoryBadge'
 
 interface PostCardProps {
   post: PostLocalized
   locale: 'ko' | 'zh'
-  basePath?: string  // '/ko/news' | '/ko/official'
 }
 
 function formatDate(dateStr: string | null): string {
@@ -16,10 +16,9 @@ function formatDate(dateStr: string | null): string {
   })
 }
 
-export function PostCard({ post, locale, basePath }: PostCardProps) {
-  const href = basePath
-    ? `${basePath}/${post.slug}`
-    : `/${locale}/news/${post.slug}`
+export function PostCard({ post, locale }: PostCardProps) {
+  // 카테고리가 곧 canonical 경로 — basePath 무관하게 항상 올바른 segment로
+  const href = `/${locale}/${getPostSegment(post.category)}/${post.slug}`
 
   return (
     <Link

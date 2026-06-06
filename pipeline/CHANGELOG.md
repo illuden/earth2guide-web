@@ -1,5 +1,58 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-06-06 (세션 11b) — SEO 마이너 픽스 배치 (의도 기록)
+
+### What
+1. **'어스2' 한글 키워드 사이트 전반 병기**: [locale]/layout 타이틀 템플릿 locale별 분리 (ko: `%s | 어스2 가이드 Earth2Guide`), 홈 메타 절대 타이틀, og:locale locale별 (zh_CN 분리 — ZH 메타 한국어 오염 fix 포함), wiki meta description locale별
+2. **news/official 경로 통일**: PostCard가 category 기반으로 링크 생성 (`getPostSegment` 헬퍼 신설), 양쪽 [slug] 페이지에서 잘못된 segment 접근 시 permanentRedirect + canonical 명시, generateStaticParams를 segment별로 필터 → 중복 콘텐츠 제거
+3. **홈 위젯 fix**: Official 섹션 쿼리를 announcement/official_news/promotion으로 (기존: official_news/promotion만 → 0건 빈 상태), 최신 뉴스는 news/update로 분리
+4. **DB 본문 정리**: e2v1-update-0-4-7-1 KO 번역 잔재([원문 제목]…) 제거, [IMAGE:N] 미치환 KO 7건 원본 JSON 매핑으로 치환
+5. **위키 고의도 페이지 title_ko에 '어스2' 병기** (가입/출금/구매 등 5-6건)
+
+### Why
+- SEO 경쟁 분석(SEO_COMPETITIVE_2026-06-06.html) 결과: 한국 유저는 '어스2'로 검색하는데 사이트에 한글 표기 전무 (Critical #1)
+- /news/와 /official/ 양쪽에 전체 154개 글이 중복 prerender되던 상태 (sitemap은 official만 선언 — 신호 불일치)
+- Alvin 승인: "다 마이너 픽스니까 그냥 쭉 진행" (2026-06-06)
+
+---
+
+## 2026-06-06 (세션 11) — step3/4 표·이미지 누락 fix + 공지 자동 수집 스케줄 등록
+
+### What (의도 — 코드 변경 전 기록)
+- `step3_translate_and_ingest.py` / `step4_translate_zh.py`의 `html_to_text_with_placeholders`를 step6 검증 패턴으로 교체
+  - `<table>` / `<figure.wp-block-table>` → GFM 마크다운 변환 (이전: 통째로 누락)
+  - p/li/blockquote 내 img → [IMAGE:N] placeholder (DOM 순서 보존)
+  - a → 마크다운 링크, strong/b → 볼드 (step6과 동일)
+  - 이미지 매핑: r2_url + 원본 src 양쪽 lookup
+- 공지 자동 수집을 Cowork 스케줄러 등록: 주 2회 (월/목 09:00), 런북 `pipeline/docs/AUTO_NEWS_RUNBOOK.md`
+- sitemap.xml 점검 (별도)
+
+### Why
+- 옛 step3/4가 표를 누락해 32개 글 사고 발생 (HANDOFF 잔재 A). 자동 수집이 이 스크립트를 사용하므로 선행 fix 필수
+- 원본 .bak 백업: `scrapers/*.py.bak-20260606`
+
+---
+
+## 2026-06-06 (세션 10 결과) — GSC/GA4 연결 완료 + Vercel 배포 차단 해결
+
+### 결과
+- **GSC**: earth2guide.com URL-접두어 속성 생성 → HTML 태그로 소유권 **자동 확인** → **sitemap.xml 제출** (358 URL, `application/xml` 유효 확인)
+- **GA4**: `G-F0PYH6DYLW` 라이브 발동 확인 (gtag.js 로드 + dataLayer 수집)
+- 배포: `098f460`(GSC/GA) + `330859a`(트리거) → `dpl_47afctZea` **READY**, earth2guide.com/www 반영
+
+### 발견/해결 — Vercel 배포 전면 차단 (중요)
+- 증상: push마다 배포가 생성 즉시 CANCELED (빌드 로그 0)
+- 원인: 프로젝트 설정 Ignored Build Step **Behavior = "Don't build anything"** (세션9 마지막 배포 이후 설정돼 있었음)
+- 해결: Behavior → **Automatic** 변경(유지, Alvin 승인). 최초 1회는 Redeploy 다이얼로그에서 "Use project's Ignore Build Step" 해제로 강제 빌드
+- ⚠️ 이후 `main` push = 자동 배포 ON
+
+### 운영 노트
+- Cowork 샌드박스 마운트는 unlink(삭제) 불가 → **이 repo의 git 쓰기/fetch는 Windows PowerShell로** (stale `index.lock` 사건. 잔여 lock 2개 + probe 파일 Windows에서 제거 완료)
+- git 동기화: 미커밋 13개 중 11개는 샌드박스 CRLF 허상 → 폐기. 문서 2개만 커밋(`60a500b`). local == origin == `330859a`
+- GSC 옛 사이트맵 항목(2022 WP, 오류 상태)은 새 sitemap.xml로 대체 — 무시 가능
+
+---
+
 ## 2026-06-06 (세션 10) — GSC + GA4 연결 (검색 콘솔 인증 + 애널리틱스 태그)
 
 ### What
@@ -304,4 +357,28 @@ DISCORD_CHANNEL_ANNOUNCEMENTS, DISCORD_CHANNEL_DEV_QA, DISCORD_SHANE_USER_ID
 ### 미적용 / 후속 작업
 - `[IMAGE:N]` 미치환 15건 (KO 7 / ZH 8): `data/articles/` 원본 필요 — 후속 처리
 - 5MB 초과 cover 이미지 35건: R2 이미지 압축 작업 별도 진행
+
+## 2026-06-06 (auto-news run)
+
+**Result: 2 new posts found, 0 published — run aborted at step2 (R2 auth failure). DB untouched, no drafts created.**
+
+### New slugs found (step1 diff vs data/index.json)
+- `e2v1-update-0-5-8-2` — "Reality Thread 8 Update – 0.5.8.2 Released" (May 31, 2026)
+- `reality-thread-8` — "Chapter 5 - Reality Thread 8 – Seeds of Change" (May 26, 2026, 117 images)
+
+### Published
+- None.
+
+### Left as draft
+- None — step3/4 (translate+ingest) intentionally NOT run. Ingesting drafts with broken image URLs would poison translate checkpoints and waste Gemini quota; both slugs will be processed end-to-end on the next run after the fix.
+
+### Failures
+1. **R2 API token dead (blocker)**: all S3 API calls (PUT/HEAD/LIST) return `401 Unauthorized`. Retried after ~3 min — same. Public serving (NEXT_PUBLIC_R2_PUBLIC_URL) returns 200, so the live site is unaffected; only ingestion writes are blocked. Likely token expired/rotated, or token has an IP allowlist that excludes sandbox egress IPs. → **Action (Alvin): check R2 API token in Cloudflare dashboard, issue a new one WITHOUT client-IP filtering, update `pipeline/.env.local`.**
+2. **step2 hardcoded Windows path (sandbox-incompatible)**: `step2_scrape_articles.py` line 51 `OUTPUT_DIR = Path("C:/Users/eldin/Desktop/earth2guide/data")` — on Linux this resolves as a relative path, so the run created a junk folder `pipeline/C:/...` (36KB, article JSON + images for the 2 slugs). Mount cannot unlink → **delete `pipeline/C:` manually in PowerShell**. Fix needed before next auto run: `OUTPUT_DIR = BASE_DIR.parent / "data"` (NOT edited in this unattended run per runbook scope; same pattern may exist in step1/step3/step4 — audit all scrapers).
+3. **Runbook nohup pattern doesn't work in this sandbox**: background processes are reaped between bash calls (even with setsid). Worked around with synchronous `timeout 43` chunks + a budget-aware step1 variant (loads /news, stops at known-slug overlap; overlap=11 → diff reliable, no LOAD MORE needed). → Update AUTO_NEWS_RUNBOOK accordingly.
+
+### State after this run (idempotent for next run)
+- `data/scrape_checkpoint.json`: 154, unchanged. `data/index.json`: 154, unchanged. `data/articles/`: unchanged. DB: untouched.
+- `pipeline/news_links.json`: refreshed (156 = 154 old + 2 new, full history merged) — next run's diff still detects both new slugs.
+- Junk: `pipeline/C:/` (manual delete), `/tmp` logs (ephemeral).
 

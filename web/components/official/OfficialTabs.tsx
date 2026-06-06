@@ -20,10 +20,9 @@ const TABS: Tab[] = [
 interface OfficialTabsProps {
   postsByCategory: Record<string, PostLocalized[]>
   locale: 'ko' | 'zh'
-  basePath: string
 }
 
-export function OfficialTabs({ postsByCategory, locale, basePath }: OfficialTabsProps) {
+export function OfficialTabs({ postsByCategory, locale }: OfficialTabsProps) {
   const [activeTab, setActiveTab] = useState(0)
 
   const currentTab = TABS[activeTab]
@@ -55,7 +54,7 @@ export function OfficialTabs({ postsByCategory, locale, basePath }: OfficialTabs
       </div>
 
       {/* 콘텐츠 */}
-      <PostList posts={currentPosts} locale={locale} basePath={basePath} />
+      <PostList posts={currentPosts} locale={locale} />
     </div>
   )
 }

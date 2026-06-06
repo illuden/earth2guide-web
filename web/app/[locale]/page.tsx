@@ -13,10 +13,16 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'home' })
+  const isKo = locale === 'ko'
   return {
-    title: t('title'),
-    description: t('subtitle'),
+    title: {
+      absolute: isKo
+        ? 'Earth2Guide 어스2 가이드 — Earth 2 메타버스 뉴스·위키 허브'
+        : 'Earth2Guide — Earth 2 元宇宙资讯与百科',
+    },
+    description: isKo
+      ? '어스2(Earth 2) 한국어 정보 허브 — 공식 공지 번역, 업데이트 뉴스, 가입·시작법·에센스·출금 위키 가이드.'
+      : 'Earth 2 中文信息中心 — 官方公告翻译、更新资讯、注册入门与 Essence 提现百科指南。',
   }
 }
 
@@ -33,8 +39,8 @@ export default async function HomePage({
 
   // 병렬 데이터 페칭
   const [latestNews, officialPosts] = await Promise.all([
-    getLatestPosts(l, ['news', 'announcement', 'update'], 6),
-    getLatestPosts(l, ['official_news', 'promotion'], 6),
+    getLatestPosts(l, ['news', 'update'], 6),
+    getLatestPosts(l, ['announcement', 'official_news', 'promotion'], 6),
   ])
 
   const wikiCategories = Object.entries(WIKI_CATEGORY_META) as [
@@ -94,7 +100,7 @@ export default async function HomePage({
             <span className="material-symbols-outlined text-base">arrow_forward</span>
           </Link>
         </div>
-        <PostList posts={latestNews} locale={l} basePath={`/${locale}/news`} />
+        <PostList posts={latestNews} locale={l} />
       </section>
 
       {/* ── Earth 2 Official ── */}
@@ -111,7 +117,7 @@ export default async function HomePage({
             <span className="material-symbols-outlined text-base">arrow_forward</span>
           </Link>
         </div>
-        <PostList posts={officialPosts} locale={l} basePath={`/${locale}/official`} />
+        <PostList posts={officialPosts} locale={l} />
       </section>
 
       {/* ── 위키 바로가기 ── */}

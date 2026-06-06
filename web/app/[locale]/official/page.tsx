@@ -53,7 +53,6 @@ export default async function OfficialPage({ params }: PageProps) {
       <OfficialTabs
         postsByCategory={postsByCategory}
         locale={l}
-        basePath={`/${locale}/official`}
       />
     </div>
   )

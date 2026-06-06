@@ -5,12 +5,29 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
 
-export const metadata: Metadata = {
-  title: {
-    template: '%s | Earth2Guide',
-    default: 'Earth2Guide — Earth 2 정보 허브',
-  },
-  description: 'Earth 2 메타버스 뉴스, 공식 공지, 위키 정보를 한곳에서',
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const isKo = locale === 'ko'
+  return {
+    title: {
+      template: isKo ? '%s | 어스2 가이드 Earth2Guide' : '%s | Earth2Guide',
+      default: isKo
+        ? 'Earth2Guide — 어스2(Earth 2) 정보 허브'
+        : 'Earth2Guide — Earth 2 信息中心',
+    },
+    description: isKo
+      ? '어스2(Earth 2) 메타버스 한국어 뉴스, 공식 공지, 위키 정보를 한곳에서'
+      : 'Earth 2 元宇宙中文资讯、官方公告与百科指南',
+    openGraph: {
+      siteName: 'Earth2Guide',
+      locale: isKo ? 'ko_KR' : 'zh_CN',
+      type: 'website',
+    },
+  }
 }
 
 export default async function LocaleLayout({

@@ -28,7 +28,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!page) return {}
   return {
     title: page.title,
-    description: `Earth2Guide 위키 — ${page.title}`,
+    description: locale === 'ko'
+      ? `어스2 위키 — ${page.title} | Earth 2 공식 가이드 한국어 정리`
+      : `Earth2Guide 百科 — ${page.title}`,
   }
 }
 

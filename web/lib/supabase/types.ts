@@ -157,6 +157,13 @@ export interface WikiFormData {
 // -----------------------------------------------
 // Category 메타데이터
 // -----------------------------------------------
+// 카테고리 → URL segment (sitemap / PostCard / [slug] redirect 공용)
+export const OFFICIAL_CATEGORIES: PostCategory[] = ['announcement', 'official_news', 'update', 'promotion']
+
+export function getPostSegment(category: PostCategory): 'news' | 'official' {
+  return OFFICIAL_CATEGORIES.includes(category) ? 'official' : 'news'
+}
+
 export const CATEGORY_META: Record<PostCategory, { label_ko: string; label_zh: string; color: string }> = {
   news:          { label_ko: '소식',      label_zh: '新闻',    color: 'blue'   },
   announcement:  { label_ko: '공지',      label_zh: '公告',    color: 'red'    },

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next'
 import { getAllPublishedSlugs } from '@/lib/supabase/queries'
+import { getPostSegment } from '@/lib/supabase/types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://earth2guide.com'
 const LOCALES = ['ko', 'zh']
@@ -31,8 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // 포스트 페이지
   for (const post of posts) {
-    const isOfficial = ['announcement', 'official_news', 'update', 'promotion'].includes(post.category)
-    const segment = isOfficial ? 'official' : 'news'
+    const segment = getPostSegment(post.category)
     for (const locale of LOCALES) {
       urls.push({
         url: `${BASE_URL}/${locale}/${segment}/${post.slug}`,

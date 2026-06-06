@@ -39,7 +39,7 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
         </h1>
       </div>
 
-      <PostList posts={result.data} locale={l} basePath={`/${locale}/news`} />
+      <PostList posts={result.data} locale={l} />
 
       <Pagination
         currentPage={result.page}
