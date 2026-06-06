@@ -2,7 +2,7 @@ import { redirect, permanentRedirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { getPostSegment } from '@/lib/supabase/types'
-import { getPostBySlug, getAllPublishedSlugs } from '@/lib/supabase/queries'
+import { getPostBySlug, getAllPostSlugsWithCategory } from '@/lib/supabase/queries'
 import { routing } from '@/i18n/routing'
 import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
@@ -17,7 +17,7 @@ interface PageProps {
 
 export async function generateStaticParams() {
   // news segment 카테고리만 prerender (official은 /official/[slug] 담당)
-  const { posts } = await getAllPublishedSlugs()
+  const posts = await getAllPostSlugsWithCategory()
   const slugs = posts.filter((p) => getPostSegment(p.category) === 'news').map((p) => p.slug)
   // [locale] × [slug] 카르테시안 — Next.js 16은 모든 dynamic segment 명시 요구
   return routing.locales.flatMap((locale) =>

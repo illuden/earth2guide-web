@@ -140,6 +140,17 @@ export async function getAllPostSlugs(): Promise<string[]> {
   return (data ?? []).map((r: { slug: string }) => r.slug)
 }
 
+/** 모든 published 포스트 slug + category (generateStaticParams용 — 빌드타임, cookies 불가 환경) */
+export async function getAllPostSlugsWithCategory(): Promise<{ slug: string; category: PostCategory }[]> {
+  const { createStaticClient } = await import('./static')
+  const supabase = createStaticClient()
+  const { data } = await supabase
+    .from('posts')
+    .select('slug, category')
+    .eq('status', 'published')
+  return (data ?? []) as { slug: string; category: PostCategory }[]
+}
+
 /** 위키 목록 (카테고리 필터) */
 export async function getWikiPages(
   locale: Locale,
