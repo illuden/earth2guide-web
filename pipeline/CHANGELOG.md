@@ -1,5 +1,27 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-06-06 (세션 10) — GSC + GA4 연결 (검색 콘솔 인증 + 애널리틱스 태그)
+
+### What
+- 루트 `web/app/layout.tsx`에 두 가지 추가:
+  - **GSC 인증**: `metadata.verification.google` → `<meta name="google-site-verification" content="Y1-Ehof…">` 자동 생성 (메타태그 방식)
+  - **GA4**: `next/script`(afterInteractive)로 gtag.js 삽입, Measurement ID `G-F0PYH6DYLW`
+
+### Why
+- earth2guide.com을 Google Search Console에 등록(색인/검색 성능 모니터) + GA4로 트래픽 측정 시작.
+- 두 값 모두 공개 ID(페이지 소스 노출 전제) → 환경변수 대신 하드코딩, 누락 위험 제거.
+
+### 영향
+- `web/` 변경 → Vercel 자동 재배포. 태그 추가만이라 기존 페이지 동작 영향 0.
+- 새 패키지 설치 없음 (`next/script` 내장 사용).
+
+### 검증
+- `npm run build` 통과 후 push.
+- 배포 후 Live HTML에 `google-site-verification` meta + gtag 존재 확인.
+- 후속(수동): GSC "확인" 클릭, 사이트맵(`/sitemap.xml`) 제출.
+
+---
+
 ## 2026-04-26 (세션 9 hotfix) — WP 자동 생성 URL 추가 redirect (태그 166개 등)
 
 ### 발견

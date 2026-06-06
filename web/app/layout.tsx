@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Space_Grotesk, Manrope } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const spaceGrotesk = Space_Grotesk({
@@ -26,6 +27,9 @@ export const metadata: Metadata = {
     locale: 'ko_KR',
     type: 'website',
   },
+  verification: {
+    google: 'Y1-EhofUImzW2z1E4N0QoHC7bAK78iPL99yPKBlOBRM',
+  },
 }
 
 export default function RootLayout({
@@ -47,6 +51,19 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col bg-[#0e1322] text-[#dee1f7] antialiased">
         {children}
+        {/* Google Analytics (GA4) — G-F0PYH6DYLW */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-F0PYH6DYLW"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-F0PYH6DYLW');
+          `}
+        </Script>
       </body>
     </html>
   )
