@@ -2,6 +2,8 @@ import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { getWikiBySlug, getWikiPages, getAllWikiSlugs } from '@/lib/supabase/queries'
+import { JsonLd, wikiLd, mdExcerpt } from '@/components/seo/JsonLd'
+import { WIKI_CATEGORY_META } from '@/lib/supabase/types'
 import { routing } from '@/i18n/routing'
 import { WikiSidebar } from '@/components/wiki/WikiSidebar'
 import { WikiCategoryDropdown } from '@/components/wiki/WikiCategoryDropdown'
@@ -26,11 +28,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale, slug } = await params
   const page = await getWikiBySlug(slug, locale as Locale)
   if (!page) return {}
+  const excerpt = mdExcerpt(page.body ?? '')
   return {
     title: page.title,
-    description: locale === 'ko'
+    description: excerpt || (locale === 'ko'
       ? `어스2 위키 — ${page.title} | Earth 2 공식 가이드 한국어 정리`
-      : `Earth2Guide 百科 — ${page.title}`,
+      : `Earth2Guide 百科 — ${page.title}`),
+    alternates: { canonical: `/${locale}/wiki/${slug}` },
   }
 }
 
@@ -45,8 +49,21 @@ export default async function WikiDetailPage({ params }: PageProps) {
 
   if (!page) redirect(`/${locale}/wiki/overview`)
 
+  const catMeta = WIKI_CATEGORY_META[page.category]
+  const categoryLabel = locale === 'ko' ? catMeta.label_ko : catMeta.label_zh
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
+      <JsonLd
+        data={wikiLd({
+          locale,
+          url: `https://earth2guide.com/${locale}/wiki/${page.slug}`,
+          title: page.title,
+          description: mdExcerpt(page.body ?? ''),
+          categoryLabel,
+          categorySlug: page.category,
+        })}
+      />
       <div className="flex gap-10">
         {/* 사이드바 (PC) */}
         <div className="hidden md:block">

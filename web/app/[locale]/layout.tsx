@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
+import { JsonLd, siteGraph } from '@/components/seo/JsonLd'
 import { Footer } from '@/components/layout/Footer'
 
 export async function generateMetadata({
@@ -47,6 +48,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <JsonLd data={siteGraph(locale)} />
       <Header />
       <main className="flex-1 pt-16">
         {children}

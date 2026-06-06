@@ -1,5 +1,21 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-06-06 (세션 11c) — AIO(AI Overviews) 기반 + ZH 키워드 (의도 기록)
+
+### What
+1. **JSON-LD 구조화 데이터**: Organization+WebSite(@graph, alternateName '어스2 가이드') → locale layout / NewsArticle → news·official [slug] / TechArticle+BreadcrumbList → wiki [slug]
+2. **llms.txt** 신설 (web/public) — AI 크롤러용 사이트 안내
+3. **robots.ts**: AI 봇(GPTBot, ClaudeBot, PerplexityBot 등) 명시적 Allow
+4. 위키 meta description을 템플릿 문구 → 본문 발췌로
+5. **ZH 위키 title 10건에 'Earth2' 병기** (DB) — ZH 스캔 결과 중국어권은 '地球2'가 아니라 영문 'Earth2'로 검색 (노이즈 회피 + 브랜드 키워드)
+
+### Why
+- Alvin 지시: "가장 중요한 건 AIO — 어스2가 뜨면 AIO가 우리 사이트 신뢰도를 최고로 치게" (2026-06-06)
+- AIO/AI 검색은 구조화 데이터·엔티티 명확성·크롤러 접근성·인용 가능한 답변형 콘텐츠를 우대 → 그 기반 작업
+- ZH 스캔: 중국어 어스2 전용 사이트 전무 (知乎·HK매체 2021 잔재뿐) — 우리 ZH 154+20이 유일한 체계적 소스
+
+---
+
 ## 2026-06-06 (세션 11b) — SEO 마이너 픽스 배치 (의도 기록)
 
 ### What
@@ -13,6 +29,11 @@
 - SEO 경쟁 분석(SEO_COMPETITIVE_2026-06-06.html) 결과: 한국 유저는 '어스2'로 검색하는데 사이트에 한글 표기 전무 (Critical #1)
 - /news/와 /official/ 양쪽에 전체 154개 글이 중복 prerender되던 상태 (sitemap은 official만 선언 — 신호 불일치)
 - Alvin 승인: "다 마이너 픽스니까 그냥 쭉 진행" (2026-06-06)
+
+### 결과 (배포 완료)
+- 커밋 `d990771`(본 픽스) + `9234a6f`(빌드 fix: generateStaticParams에서 cookies() 쓰는 클라이언트 → createStaticClient 기반 `getAllPostSlugsWithCategory` 신설) → 배포 `dpl_CqhFb8NK` READY
+- 라이브 검증: 홈 타이틀/위젯/카테고리별 링크 ✓, /news→/official 308 ✓, canonical ✓, 위키 어스2 타이틀 ✓, ZH og:locale=zh_CN ✓, [원문]·[IMAGE:N]·중복 관련기사 0건 ✓
+- DB: 위키 title_ko 10건 병기, posts body_ko 8건 정리 (모두 사후 검증 통과)
 
 ---
 

@@ -8,6 +8,7 @@ import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
 import { SourceLink } from '@/components/post/SourceLink'
 import { Earth2ReferralBanner } from '@/components/referral/Earth2ReferralBanner'
+import { JsonLd, articleLd } from '@/components/seo/JsonLd'
 
 export const revalidate = 3600
 
@@ -61,6 +62,17 @@ export default async function NewsDetailPage({ params }: PageProps) {
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">
+      <JsonLd
+        data={articleLd({
+          locale,
+          url: `https://earth2guide.com/${locale}/news/${post.slug}`,
+          title: post.title,
+          description: post.summary,
+          image: post.cover_image_url,
+          datePublished: post.published_at,
+          sourceUrl: post.source_url,
+        })}
+      />
       {/* 메타 */}
       <div className="flex items-center gap-3 mb-4">
         <CategoryBadge category={post.category} locale={l} />
