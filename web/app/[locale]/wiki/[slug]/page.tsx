@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { getWikiBySlug, getWikiPages, getAllWikiSlugs } from '@/lib/supabase/queries'
-import { JsonLd, wikiLd, mdExcerpt } from '@/components/seo/JsonLd'
+import { JsonLd, wikiLd, mdExcerpt, faqFromMarkdown, faqLd } from '@/components/seo/JsonLd'
 import { WIKI_CATEGORY_META } from '@/lib/supabase/types'
 import { routing } from '@/i18n/routing'
 import { WikiSidebar } from '@/components/wiki/WikiSidebar'
@@ -51,6 +51,7 @@ export default async function WikiDetailPage({ params }: PageProps) {
 
   const catMeta = WIKI_CATEGORY_META[page.category]
   const categoryLabel = locale === 'ko' ? catMeta.label_ko : catMeta.label_zh
+  const faqItems = faqFromMarkdown(page.body ?? '')
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
@@ -64,6 +65,7 @@ export default async function WikiDetailPage({ params }: PageProps) {
           categorySlug: page.category,
         })}
       />
+      {faqItems.length > 0 && <JsonLd data={faqLd(faqItems, locale)} />}
       <div className="flex gap-10">
         {/* 사이드바 (PC) */}
         <div className="hidden md:block">

@@ -1,5 +1,19 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-06-06 (세션 11d) — AIO 후속: About/법적 페이지 + 위키 FAQ + 용어집 (의도 기록)
+
+### What
+1. `/[locale]/about` `/privacy` `/terms` 정적 페이지 신설 (KO/ZH) — Footer 죽은 링크(#) 연결, About에 AboutPage 스키마. Discord/Twitter 더미 외부링크는 실URL 확보 전까지 Footer에서 제거
+2. 위키 가입/출금 페이지 body에 ' 자주 묻는 질문' 섹션 append (KO/ZH, 기존 본문 사실만 재구성) + 마크다운 FAQ 파서로 FAQPage JSON-LD 자동 생성
+3. 위키 신규 페이지 `glossary` (어스2 용어집, KO/ZH) — overview 카테고리, 보존 용어 15개 정의. 엔티티 사전 = AIO 인용 타깃
+4. sitemap 정적 경로에 /about 추가
+
+### Why
+- AIO 후속 권고(리포트 §7) 실행 — E-E-A-T 신뢰 신호(About/법적 고지) + AIO가 가장 잘 인용하는 FAQ 포맷 + 용어 정의 독점
+- Alvin 승인: "작업 계속 할 수 있는 건 계속 해줘" (2026-06-06)
+
+---
+
 ## 2026-06-06 (세션 11c) — AIO(AI Overviews) 기반 + ZH 키워드 (의도 기록)
 
 ### What
@@ -13,6 +27,11 @@
 - Alvin 지시: "가장 중요한 건 AIO — 어스2가 뜨면 AIO가 우리 사이트 신뢰도를 최고로 치게" (2026-06-06)
 - AIO/AI 검색은 구조화 데이터·엔티티 명확성·크롤러 접근성·인용 가능한 답변형 콘텐츠를 우대 → 그 기반 작업
 - ZH 스캔: 중국어 어스2 전용 사이트 전무 (知乎·HK매체 2021 잔재뿐) — 우리 ZH 154+20이 유일한 체계적 소스
+
+### 결과 (배포 완료)
+- 커밋 `e44a30a` → 배포 `dpl_TXXNmmXL` READY
+- 라이브 검증: JSON-LD 렌더 확인 (공지=Organization+WebSite+NewsArticle / 위키=+TechArticle+BreadcrumbList, Chrome 실측), robots.txt AI봇 11종 ✓, llms.txt ✓, 위키 meta 발췌 ✓, ZH 위키 title 10건 'Earth2' 병기 ✓
+- 리포트 확장: SEO_COMPETITIVE_2026-06-06.html에 ZH 스캔(§6) + AIO 작업(§7) 섹션 추가
 
 ---
 

@@ -135,3 +135,41 @@ export function mdExcerpt(md: string, max = 155): string {
     .trim()
   return text.length > max ? text.slice(0, max - 1).trimEnd() + '…' : text
 }
+
+
+/** 마크다운에서 FAQ 섹션 추출 — '## 자주 묻는 질문' / '## 常见问题' 아래 '### 질문' + 본문 */
+export function faqFromMarkdown(md: string): { q: string; a: string }[] {
+  const m = md.match(/^##\s*(자주 묻는 질문|常见问题)\s*$/m)
+  if (!m || m.index === undefined) return []
+  const section = md.slice(m.index)
+  const lines = section.split('\n').slice(1)
+  const out: { q: string; a: string }[] = []
+  let q: string | null = null
+  let buf: string[] = []
+  const flush = () => {
+    if (q && buf.join(' ').trim()) out.push({ q, a: buf.join(' ').replace(/\s+/g, ' ').trim() })
+    buf = []
+  }
+  for (const line of lines) {
+    if (/^##[^#]/.test(line)) break // 다음 H2에서 종료
+    const qm = line.match(/^###\s+(.+)$/)
+    if (qm) { flush(); q = qm[1].replace(/^Q[.:]?\s*/i, '').trim() }
+    else if (q) buf.push(line)
+  }
+  flush()
+  return out
+}
+
+/** FAQPage JSON-LD */
+export function faqLd(items: { q: string; a: string }[], locale: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: locale === 'ko' ? 'ko-KR' : 'zh-CN',
+    mainEntity: items.map((it) => ({
+      '@type': 'Question',
+      name: it.q,
+      acceptedAnswer: { '@type': 'Answer', text: it.a },
+    })),
+  }
+}

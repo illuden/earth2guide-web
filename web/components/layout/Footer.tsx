@@ -1,13 +1,14 @@
 import Link from 'next/link'
 
-export function Footer() {
+export function Footer({ locale = 'ko' }: { locale?: string }) {
   const year = new Date().getFullYear()
+  const isKo = locale === 'ko'
 
   const links = [
-    { href: '#', label: 'Privacy Policy' },
-    { href: '#', label: 'Terms of Service' },
-    { href: 'https://discord.gg/', label: 'Discord' },
-    { href: 'https://twitter.com/', label: 'Twitter' },
+    { href: `/${locale}/about`, label: isKo ? '소개' : '关于' },
+    { href: `/${locale}/privacy`, label: 'Privacy Policy' },
+    { href: `/${locale}/terms`, label: 'Terms of Service' },
+    { href: `/${locale}/wiki/glossary`, label: isKo ? '어스2 용어집' : 'Earth2 术语表' },
   ]
 
   return (
