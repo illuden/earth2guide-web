@@ -12,6 +12,15 @@
 - AIO 후속 권고(리포트 §7) 실행 — E-E-A-T 신뢰 신호(About/법적 고지) + AIO가 가장 잘 인용하는 FAQ 포맷 + 용어 정의 독점
 - Alvin 승인: "작업 계속 할 수 있는 건 계속 해줘" (2026-06-06)
 
+### 결과 (배포 완료)
+- 커밋 `3544542` → 배포 `dpl_BEdvtghY` READY
+- 라이브 검증 (Chrome 실측):
+  - /ko/about · /privacy · /terms 정상, AboutPage 스키마 ✓, Footer 링크 4종 실연결 (더미 Discord/Twitter 제거)
+  - 위키 가입/출금 페이지: FAQPage 스키마 발동 ✓ (마크다운 FAQ 파서)
+  - **/ko/wiki/glossary 신설** — 용어 17개 + FAQ 2건, TechArticle+FAQPage 스키마 ✓ (ZH 동일)
+- sitemap: 정적 경로 +about, glossary 자동 포함 (358 → 362 URL)
+- DB: wiki_pages FAQ append 2건(KO/ZH), glossary INSERT 1건 (published)
+
 ---
 
 ## 2026-06-06 (세션 11c) — AIO(AI Overviews) 기반 + ZH 키워드 (의도 기록)
@@ -422,3 +431,54 @@ DISCORD_CHANNEL_ANNOUNCEMENTS, DISCORD_CHANNEL_DEV_QA, DISCORD_SHANE_USER_ID
 - `pipeline/news_links.json`: refreshed (156 = 154 old + 2 new, full history merged) — next run's diff still detects both new slugs.
 - Junk: `pipeline/C:/` (manual delete), `/tmp` logs (ephemeral).
 
+## 2026-06-06 (auto-news run, scheduled task 1st live run)
+
+### Result
+- NEW slugs found: 2 — `e2v1-update-0-5-8-2` (May 31, update), `reality-thread-8` (May 26, announcement, 104 chunks/lang)
+- Published: 2/2 (KO+ZH 모두 검증 통과 — body 비어있지 않음, [IMAGE: 잔여 0, 테이블 0=0 일치, ASCII slug, published_at OK)
+- Left as draft: 0 | Failures: 0
+- Live 확인: /ko/official/e2v1-update-0-5-8-2 200 ✓, /zh/official/reality-thread-8 200 ✓ (R2 이미지 로드 확인)
+- R2: reality-thread-8 이미지 117개 전부 업로드 (43개 신규 + 74개 기존 재사용), e2v1 8개 전부 기존 재사용
+
+### Fixes applied (코드 변경 — 검토 요망)
+1. **step3/step4 Gemini 모델 교체**: `gemini-2.0-flash` → `gemini-2.5-flash` + `thinkingConfig:{thinkingBudget:0}` (1줄씩).
+   사유: Google이 2.0-flash 폐기 — API가 404 "no longer available" 반환, 파이프라인 전면 불능이었음. Windows 수동 실행도 동일하게 깨진 상태였음.
+   주의: `*.py.bak-20260606` 백업은 오늘 새벽 테이블 수정 *이전* 상태라 복원 시 두 수정이 모두 사라짐.
+2. **R2 S3 자격증명(.env.local) 401**: 샌드박스에서 R2 S3 API가 read/write 전부 401 Unauthorized (IP 제한 또는 토큰 회전 추정 — Alvin 확인 필요).
+   우회: workspace 루트 `.env`의 `CLOUDFLARE_API_TOKEN`으로 R2 REST API 업로드 (정상 동작 확인).
+
+### Sandbox adapters (원본 스크립트 무수정, 신규 파일)
+- `pipeline/sandbox_step2_wrapper.py` — step2의 하드코딩 Windows 경로(`C:/Users/...`)를 실제 `data/`로 repoint + REST 업로드 (first-writer-wins 유지)
+- `pipeline/sandbox_translate_wrapper.py` — step3/4에 청크 단위 resume 추가 (45s 샌드박스 한계 대응; 원본 체크포인트는 아티클 단위라 104청크 아티클 처리 불가)
+- 영구 캐시: `data/r2_uploaded_cache.json` (9,646 keys, 버킷 listing으로 시드)
+
+### State after this run
+- `data/scrape_checkpoint.json` 156 | `data/index.json` 156 | translate/zh 체크포인트에 신규 2개 추가
+- DB: 2 rows upsert→published. 기존 154 rows 무접촉.
+
+### Manual cleanup 권장 (샌드박스에서 unlink 불가 — PowerShell로)
+- `pipeline/C:/` 정크 폴더 (step2 하드코딩 경로 부산물; **git add . 전에 반드시 삭제**)
+- `data/translate_progress_*.json` 4개 (done 마커), `data/unlink_test.txt`, `pipeline/logs/` 작업 로그, `pipeline/pw_install.log`, `pipeline/logs_step1.txt`
+- 장기 과제: step2/3/4의 `BASE_DIR=C:/Users/...` 하드코딩을 상대경로로 교체하면 wrapper 불필요
+
+
+## 2026-06-12 (auto-news run)
+
+- **신규 0건.** earth2.io/news WordPress REST API `found=156` == data/index.json 156 == DB `posts` status=published 156 (3자 완전 일치). publish 0 / draft 잔류 0 / 실패 0. (run: 2026-06-12 01:14 KST)
+- 잔여 translate_progress 4파일(reality-thread-8, e2v1-update-0-5-8-2 의 ko/zh)은 점검 결과 둘 다 이미 **published** (body_ko/zh 정상, `[IMAGE:` 잔재 없음, published_at 설정됨) — 무해한 잔재이며 미처리 작업 아님.
+- ⚠️ 운영 메모(다음 런): ① earth2.io/news가 클라이언트 렌더 + WordPress REST 13건/페이지 방식으로 동작 → step1(브라우저 LOAD MORE)은 networkidle로도 13건만 수집됨(과거 156건 수집과 거동 달라짐). 이번엔 SPA가 호출하는 원본 API `public-api.wordpress.com/rest/v1.1/sites/195754016/posts?number=100&offset=N` 를 브라우저 컨텍스트로 직접 조회해 156건 확정 (news_links.json source=wordpress-api). → **step1을 WP API 방식으로 교체 권장** (Alvin 승인 후 코드 변경). ② 샌드박스 `/sessions` 볼륨 100% full(옛 세션 280+개 누적) → pip/chromium을 root fs로 우회 설치 필요: `PLAYWRIGHT_BROWSERS_PATH=/var/tmp/ms-playwright`, `TMPDIR=/tmp`.
+
+
+## 2026-06-12 (session — 색인 stale 캐시 픽스 + step1 WP API 교체)
+
+### 색인 픽스 (web, 배포됨 — commit `17ec07b`, dpl `CGGgyij5...` READY)
+- **증상**: 크롤러가 색인하는 정규 URL `/ko`·`/zh`(bare)가 옛 빌드 캐시에 고정 — 옛 타이틀 `Earth2Guide | Earth2Guide`, 빈 Official 섹션, 더미 푸터(Discord/Twitter `#`), 옛 `/news/` 내부링크 노출. 반면 `/`(→308 `/ko`)·`/ko?query`는 정상 렌더 → 코드·배포는 정상이었고 full-route 캐시만 stale.
+- **원인**: 수정 커밋 `d990771`(타이틀·경로통일·Official 픽스)이 빌드 ERROR로 한 번 죽었고, 이후 정상 배포(`9234a6f`→`deb1545`)에도 `/ko`·`/zh` 캐시가 3+ 배포 동안 안 풀림.
+- **조치**: `app/[locale]/{page, news/page, official/page, wiki/page}.tsx` → `revalidate=300` 제거하고 `export const dynamic='force-dynamic'`. 항상 SSR 렌더라 stale 정적 캐시 차단 + 재발 방지. 저트래픽이라 서버 비용 무시 가능.
+- **검증**: bare `/ko`·`/zh` 라이브 — 정상 타이틀·Official 채워짐·`/official/` 경로·실 푸터 확인.
+- 미해결(백로그): `/zh` 히어로 배지·리퍼럴 배너 i18n 한국어 잔존.
+
+### step1 WP API 교체 (pipeline, 로컬 전용 — `pipeline/` gitignore라 커밋 대상 아님)
+- 기존 Playwright "LOAD MORE" → earth2.io 변경(클라 렌더 + WP REST 13건/page)으로 13건만 수집되던 문제. `scrapers/step1_collect_links.py`를 `public-api.wordpress.com/rest/v1.1/sites/195754016/posts` 페이지네이션 직접 호출로 교체(Playwright/chromium 불필요). 백업 `step1_collect_links.py.bak-20260612`.
+- 테스트(샌드박스): 156건 전량 수집, slug/shape 6/12 결과와 동일, NEW(vs `data/index.json`)=0. **월요일(6/15) 자동런부터 적용** — 별도 배포 불필요(로컬 스크립트).
+- 런북 `docs/AUTO_NEWS_RUNBOOK.md` §0/§1 갱신: discovery 무브라우저(~5s), chromium은 NEW slug 있어 step2 돌릴 때만 root fs(`PLAYWRIGHT_BROWSERS_PATH=/var/tmp/ms-playwright`)에 설치 → `/sessions` 디스크 풀 회피. (현재 디스크 / 63%, /sessions 73% 여유.)
