@@ -26,7 +26,7 @@ export async function generateMetadata({
   }
 }
 
-export const revalidate = 300 // 5분 ISR
+export const dynamic = 'force-dynamic' // 홈은 항상 최신 렌더 — 크롤러 stale 캐시 방지
 
 export default async function HomePage({
   params,

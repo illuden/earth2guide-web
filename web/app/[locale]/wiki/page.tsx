@@ -1,5 +1,7 @@
 import { redirect } from 'next/navigation'
 
+export const dynamic = 'force-dynamic' // 리다이렉트도 정적 캐시 고정 방지
+
 interface PageProps {
   params: Promise<{ locale: string }>
 }

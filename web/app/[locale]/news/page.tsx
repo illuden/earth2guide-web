@@ -5,7 +5,7 @@ import { getPostList } from '@/lib/supabase/queries'
 import { PostList } from '@/components/news/PostList'
 import { Pagination } from '@/components/news/Pagination'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic' // 목록 항상 최신 렌더 — 크롤러 stale 캐시 방지
 
 interface PageProps {
   params: Promise<{ locale: string }>

@@ -4,7 +4,7 @@ import type { Locale, PostCategory } from '@/lib/supabase/types'
 import { getLatestPosts } from '@/lib/supabase/queries'
 import { OfficialTabs } from '@/components/official/OfficialTabs'
 
-export const revalidate = 300
+export const dynamic = 'force-dynamic' // 목록 항상 최신 렌더 — 크롤러 stale 캐시 방지
 
 interface PageProps {
   params: Promise<{ locale: string }>
