@@ -6,15 +6,16 @@ import { PostList } from '@/components/news/PostList'
 
 interface Tab {
   id: PostCategory[]
-  label: string
+  label_ko: string
+  label_zh: string
   icon: string
 }
 
 const TABS: Tab[] = [
-  { id: ['announcement'], label: '공지',     icon: 'campaign' },
-  { id: ['official_news'], label: '뉴스',    icon: 'newspaper' },
-  { id: ['update'],        label: '업데이트', icon: 'update' },
-  { id: ['promotion'],     label: '홍보',    icon: 'star' },
+  { id: ['announcement'],  label_ko: '공지',     label_zh: '公告', icon: 'campaign' },
+  { id: ['official_news'], label_ko: '뉴스',     label_zh: '新闻', icon: 'newspaper' },
+  { id: ['update'],        label_ko: '업데이트', label_zh: '更新', icon: 'update' },
+  { id: ['promotion'],     label_ko: '홍보',     label_zh: '推广', icon: 'star' },
 ]
 
 interface OfficialTabsProps {
@@ -39,7 +40,7 @@ export function OfficialTabs({ postsByCategory, locale }: OfficialTabsProps) {
       <div className="flex gap-1 mb-8 border-b border-[#3c494e]/30 overflow-x-auto">
         {TABS.map((tab, index) => (
           <button
-            key={tab.label}
+            key={tab.icon}
             onClick={() => setActiveTab(index)}
             className={`flex items-center gap-2 px-5 py-3 text-sm font-label uppercase tracking-wider border-b-2 transition-all whitespace-nowrap ${
               activeTab === index
@@ -48,7 +49,7 @@ export function OfficialTabs({ postsByCategory, locale }: OfficialTabsProps) {
             }`}
           >
             <span className="material-symbols-outlined text-base">{tab.icon}</span>
-            {tab.label}
+            {locale === 'ko' ? tab.label_ko : tab.label_zh}
           </button>
         ))}
       </div>

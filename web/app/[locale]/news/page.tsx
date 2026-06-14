@@ -11,7 +11,12 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'nav' })
-  return { title: t('news') }
+  return {
+    title: t('news'),
+    description: locale === 'ko'
+      ? '어스2(Earth 2) 최신 뉴스·업데이트 — 공식 공지 한국어 번역과 E2V1 소식.'
+      : 'Earth 2 最新资讯与更新 — 官方公告中文翻译与 E2V1 动态。',
+  }
 }
 
 export default async function NewsPage({ params }: PageProps) {
