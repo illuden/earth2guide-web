@@ -1,10 +1,16 @@
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
+import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { JsonLd, siteGraph } from '@/components/seo/JsonLd'
 import { Footer } from '@/components/layout/Footer'
+
+// static export: [locale] 전부 prerender
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }))
+}
 
 export async function generateMetadata({
   params,
@@ -43,6 +49,9 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound()
   }
+
+  // static rendering 활성화 (next-intl)
+  setRequestLocale(locale)
 
   const messages = (await import(`@/messages/${locale}.json`)).default
 

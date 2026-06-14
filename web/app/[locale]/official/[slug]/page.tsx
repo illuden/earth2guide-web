@@ -1,16 +1,15 @@
-import { redirect, permanentRedirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/lib/supabase/types'
 import { getPostSegment } from '@/lib/supabase/types'
-import { getPostBySlug, getAllPostSlugsWithCategory } from '@/lib/supabase/queries'
+import { getPostBySlug, getAllPostSlugsWithCategory } from '@/lib/content'
 import { routing } from '@/i18n/routing'
 import { CategoryBadge } from '@/components/news/CategoryBadge'
 import { PostBody } from '@/components/post/PostBody'
 import { SourceLink } from '@/components/post/SourceLink'
 import { Earth2ReferralBanner } from '@/components/referral/Earth2ReferralBanner'
 import { JsonLd, articleLd } from '@/components/seo/JsonLd'
-
-export const revalidate = 3600
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -52,13 +51,10 @@ function formatDate(dateStr: string | null): string {
 export default async function OfficialDetailPage({ params }: PageProps) {
   const { locale, slug } = await params
   const l = locale as Locale
+  setRequestLocale(locale)
   const post = await getPostBySlug(slug, l)
 
-  if (!post) redirect(`/${locale}/official`)
-  if (getPostSegment(post.category) === 'news') {
-    // 잘못된 segment 접근 — canonical 경로로 영구 이동 (중복 콘텐츠 방지)
-    permanentRedirect(`/${locale}/news/${post.slug}`)
-  }
+  if (!post) notFound()
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12">

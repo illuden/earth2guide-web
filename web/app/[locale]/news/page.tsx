@@ -1,15 +1,11 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
-import { getPostList } from '@/lib/supabase/queries'
-import { PostList } from '@/components/news/PostList'
-import { Pagination } from '@/components/news/Pagination'
-
-export const dynamic = 'force-dynamic' // 목록 항상 최신 렌더 — 크롤러 stale 캐시 방지
+import { getPostList } from '@/lib/content'
+import { PostListPaginated } from '@/components/news/PostListPaginated'
 
 interface PageProps {
   params: Promise<{ locale: string }>
-  searchParams: Promise<{ page?: string }>
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -18,14 +14,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return { title: t('news') }
 }
 
-export default async function NewsPage({ params, searchParams }: PageProps) {
+export default async function NewsPage({ params }: PageProps) {
   const { locale } = await params
-  const { page: pageParam } = await searchParams
   const l = locale as Locale
-  const page = Math.max(1, parseInt(pageParam ?? '1', 10))
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'nav' })
 
-  const result = await getPostList(l, ['news', 'announcement', 'update'], page)
+  // static: 전체 로드 → 클라이언트 페이지네이션
+  const result = await getPostList(l, ['news', 'announcement', 'update'], 1, 100000)
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
@@ -39,13 +35,7 @@ export default async function NewsPage({ params, searchParams }: PageProps) {
         </h1>
       </div>
 
-      <PostList posts={result.data} locale={l} />
-
-      <Pagination
-        currentPage={result.page}
-        totalPages={result.totalPages}
-        basePath={`/${locale}/news`}
-      />
+      <PostListPaginated posts={result.data} locale={l} pageSize={12} />
     </div>
   )
 }

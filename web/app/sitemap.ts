@@ -1,11 +1,12 @@
 import type { MetadataRoute } from 'next'
-import { getAllPublishedSlugs } from '@/lib/supabase/queries'
+import { getAllPublishedSlugs } from '@/lib/content'
 import { getPostSegment } from '@/lib/supabase/types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://earth2guide.com'
 const LOCALES = ['ko', 'zh']
 
-export const revalidate = 3600
+// static export 호환: 빌드타임 1회 생성
+export const dynamic = 'force-static'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { posts, wikis } = await getAllPublishedSlugs()

@@ -1,10 +1,8 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
-import type { Locale, PostCategory } from '@/lib/supabase/types'
-import { getLatestPosts } from '@/lib/supabase/queries'
+import type { Locale } from '@/lib/supabase/types'
+import { getLatestPosts } from '@/lib/content'
 import { OfficialTabs } from '@/components/official/OfficialTabs'
-
-export const dynamic = 'force-dynamic' // 목록 항상 최신 렌더 — 크롤러 stale 캐시 방지
 
 interface PageProps {
   params: Promise<{ locale: string }>
@@ -16,11 +14,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return { title: t('official') }
 }
 
-const OFFICIAL_CATEGORIES: PostCategory[] = ['announcement', 'official_news', 'update', 'promotion']
-
 export default async function OfficialPage({ params }: PageProps) {
   const { locale } = await params
   const l = locale as Locale
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'nav' })
 
   // 카테고리별로 포스트 병렬 로딩 (각 최대 20개)

@@ -1,16 +1,14 @@
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/lib/supabase/types'
-import { getWikiBySlug, getWikiPages, getAllWikiSlugs } from '@/lib/supabase/queries'
+import { getWikiBySlug, getWikiPages, getAllWikiSlugs } from '@/lib/content'
 import { JsonLd, wikiLd, mdExcerpt, faqFromMarkdown, faqLd } from '@/components/seo/JsonLd'
 import { WIKI_CATEGORY_META } from '@/lib/supabase/types'
 import { routing } from '@/i18n/routing'
 import { WikiSidebar } from '@/components/wiki/WikiSidebar'
 import { WikiCategoryDropdown } from '@/components/wiki/WikiCategoryDropdown'
 import { WikiContent } from '@/components/wiki/WikiContent'
-
-export const revalidate = 3600
-export const dynamicParams = true   // 빌드 후 추가된 slug도 ISR로 처리
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -41,13 +39,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function WikiDetailPage({ params }: PageProps) {
   const { locale, slug } = await params
   const l = locale as Locale
+  setRequestLocale(locale)
 
   const [page, allPages] = await Promise.all([
     getWikiBySlug(slug, l),
     getWikiPages(l),
   ])
 
-  if (!page) redirect(`/${locale}/wiki/overview`)
+  if (!page) notFound()
 
   const catMeta = WIKI_CATEGORY_META[page.category]
   const categoryLabel = locale === 'ko' ? catMeta.label_ko : catMeta.label_zh

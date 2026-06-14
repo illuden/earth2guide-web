@@ -18,6 +18,9 @@
 data/
 earth2_scraped/
 
+# ---------- 마이그레이션 백업 (DB·Discord 덤프 — 대용량/민감) ----------
+_backup/
+
 # ---------- pipeline 폴더 전체 (로컬 작업용) ----------
 pipeline/
 

@@ -1,9 +1,9 @@
-import { getTranslations } from 'next-intl/server'
+import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import type { Locale } from '@/lib/supabase/types'
 import { WIKI_CATEGORY_META } from '@/lib/supabase/types'
-import { getLatestPosts } from '@/lib/supabase/queries'
+import { getLatestPosts } from '@/lib/content'
 import { PostList } from '@/components/news/PostList'
 import { Earth2ReferralBanner } from '@/components/referral/Earth2ReferralBanner'
 
@@ -26,8 +26,6 @@ export async function generateMetadata({
   }
 }
 
-export const dynamic = 'force-dynamic' // 홈은 항상 최신 렌더 — 크롤러 stale 캐시 방지
-
 export default async function HomePage({
   params,
 }: {
@@ -35,9 +33,10 @@ export default async function HomePage({
 }) {
   const { locale } = await params
   const l = locale as Locale
+  setRequestLocale(locale)
   const t = await getTranslations({ locale, namespace: 'home' })
 
-  // 병렬 데이터 페칭
+  // 병렬 데이터 페칭 (빌드타임)
   const [latestNews, officialPosts] = await Promise.all([
     getLatestPosts(l, ['news', 'update'], 6),
     getLatestPosts(l, ['announcement', 'official_news', 'promotion'], 6),
