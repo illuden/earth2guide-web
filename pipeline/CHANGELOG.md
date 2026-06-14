@@ -1,5 +1,76 @@
 # CHANGELOG — earth2guide.com
 
+## 2026-06-14 (세션 14) — git 배포 전환: CF git 프로젝트 + API 트리거 + 도메인 컷오버
+
+### What
+- 배포 모델 전환: 구 direct-upload(wrangler) → **CF Pages git 프로젝트 `earth2guide-web`** (GitHub `illuden/earth2guide-web` 연결). 빌드: root=`web`, `npm install` + `npm run build`, out, node 22.
+- `web/.node-version`=22 추가(`3bbc8ca`). lockfile 크로스플랫폼 이슈(Windows lock이 `@next/swc-linux`·`@parcel/watcher-linux-x64-glibc` 누락) → **`package-lock.json` git 미추적**(gitignore), CF `npm install`로 해결(`3a86765`).
+- 배포 트리거 = **CF API (Option C)**: git push 네이티브 webhook 미작동 확인(3회 push 무반응, config 정상) → push 후 `POST /accounts/{acct}/pages/projects/earth2guide-web/deployments` 명시 트리거.
+- 도메인 컷오버: `earth2guide.com`+`www` → earth2guide-web(둘 다 active), DNS CNAME → `earth2guide-web.pages.dev`. 구 `earth2guide` 프로젝트는 폴백(1주 후 삭제·P6).
+- 주간 자동화 `earth2guide-weekly-autonews` STEP4/5 = git push + CF API 트리거(로컬 빌드·wrangler 제거).
+- 문서: ARCHITECTURE·프로젝트 CLAUDE.md·CONTEXT·DECISIONS 갱신. CONTEXT에 "git push 자동 트리거" 목표 메모(보류).
+
+### 검증
+- 빌드 그린: deploy `11d35a57`/`64a2a777`. earth2guide.com/ko HTTP 200 + `cf-cache-status: DYNAMIC`(HTML 엣지캐시 안 함) + 신규 콘텐츠(리퍼럴 00000 상세배너, `?cb=`로 확정).
+- git: `3bbc8ca` `a4e71e6` `3a86765` `5e1a195` `b730e72` `53fb3b4` — HEAD=origin/main 동기화.
+
+### 미해결
+- git push 네이티브 자동배포 webhook 미작동(GitHub App 전달 안 됨) → Option C(API 트리거) 우회. 향후 GitHub Actions 또는 webhook 재연결로 하드닝(→ CONTEXT ★목표).
+
+## 2026-06-14 (세션 13d) — 다른 세션 마감 + 라이브=git 일치
+
+- 다른 세션이 stale 컨텍스트(Vercel→CF "이관 중"으로 오인, Vercel은 이미 삭제)로 작업해 혼선. 진단: git 멀쩡(분기·유실 0, HEAD=origin/main=`96f0732`, force-dynamic은 `f43b5ce`가 덮음, 수정된 글 0).
+- 현재 HEAD(`96f0732` = Official 탭 ko/zh i18n + news/official 목록 meta desc) 빌드 그린(375) → CF 배포 `27bb0e61` → **라이브=git 일치**. /zh/official 중국어 탭·리퍼럴바 검증 통과.
+- **Session Close**: CONTEXT 현행화 + DECISIONS(세션13)·sessions(session13 summary+narrative) 갱신. git 미접촉(로컬 저장만).
+- 워치: ZH 글 카드 "읽기"(read) 라벨 i18n 누락(사소).
+
+## 2026-06-14 (세션 13c) — env 죽은 시크릿 정리
+
+- `web/.env.local` + `pipeline/.env.local`에서 삭제된 스택의 죽은 키 제거: Supabase(URL·anon·**service_role**)·Gemini·Discord(빈 자리). R2(이미지·live)·사이트·리퍼럴 변수는 유지 → autonews 영향 없음.
+- 두 파일 모두 gitignore라 **git에 커밋된 적 없음**(이력 스크럽 불필요). root `.env`는 이미 깨끗.
+- 참고: Supabase 키는 프로젝트 삭제로 무효. **Gemini 키는 파일에선 지웠지만 구글 측에선 아직 유효할 수 있음** → 안 쓰므로 원하면 AI Studio에서 폐기 권장.
+
+## 2026-06-14 (세션 13b) — 리퍼럴 코드 사이트 전체 복원
+
+### 문제
+- 이관 후 홈 배너가 코드 없는 맨 `app.earth2.io` 링크만 남고, messages의 referral는 화면에 안 쓰이는 dead 키 → 실제 코드(00000)가 어디에도 표시 안 됨. 배너는 홈에만.
+- git 추적: 커밋 `fc60d4c`("update referral banner")에서 `earth2.io/?r=00000` 링크 + 코드 표시가 제거된 게 원인. 코드 **00000은 Alvin 실제 코드**(플레이스홀더 아님). 링크형 아님 — 결제 단계 수동 입력형.
+
+### What
+- `web/lib/referral.ts` 신규: `REFERRAL_CODE = env.NEXT_PUBLIC_REFERRAL_CODE || '00000'`, EARTH2_APP_URL 단일소스
+- `Earth2ReferralBanner.tsx`(홈): i18n화 + 코드 칩(복사) + 안내문(결제 단계 입력, 정보 전달용)
+- `ReferralBar.tsx` 신규(슬림 띠): 내부 전 페이지 상단. usePathname으로 홈 제외. `app/[locale]/layout.tsx`에 연결
+- messages ko/zh referral 재구성(badge/headline/instruction/codeLabel/barText/copy/copied/cta). zh 배너도 정상 번역(기존엔 홈 배너가 KO 하드코딩)
+- .env.local/.env.example에 NEXT_PUBLIC_REFERRAL_CODE=00000
+
+### 검증
+- 빌드 EXIT0(375 HTML). 배포 `749861ec`. git `05167e8`(web 6파일)
+- 라이브: 홈=큰 배너(코드 00000+복사+안내) / 내부=슬림 띠(redeem 00000 복사), 홈엔 슬림바 없음(의도대로). pages.dev+캐시버스트로 확인. 맨 `/ko`는 CDN 캐시로 잠시 구버전 보일 수 있음(곧 갱신)
+
+### 메모(후속)
+- `web/.env.local`에 삭제된 Supabase service_role·Gemini 키 잔존(gitignore·죽은 값) → 정리 제안
+- `.env.example`은 .gitignore `.env*` 룰로 커밋 제외(기능 영향 없음 — lib 기본값 00000)
+
+## 2026-06-14 (세션 13) — 키워드 SEO: Essence 허브 + 근황 위키 신설·배포
+
+### What
+- 신규 위키 4페이지 배포 (KO/ZH): `/wiki/essence`(어스2 에센스 — "어스2 코인" 쿼리 흡수), `/wiki/earth2-status-2026`(어스2 근황·현황 2026)
+- manifest.json wiki 21→23, sitemap 366→370, 빌드 out/ 371→375 HTML
+- CF direct-upload 배포(deploy e4d3e989), git push `bd8dfa8` (web/content 5파일만)
+
+### Why
+- GSC 90일 진단: 클릭 0 / 노출 64, 타겟 3키워드(어스2 에센스·코인·근황) **노출 0**. 단 `어스2 출금`=평균 5.5위(전용 페이지 효과) → 전용 타겟 페이지 신설이 핵심 레버
+- 경쟁: earth2pedia·earth2korea(니치 정보), CoinGecko류(가격). 가격경쟁 회피 + 정보형 의도 공략, 시세는 CoinGecko 링크아웃
+
+### 검증
+- 라이브 4 URL 렌더·canonical·메타description(키워드 포함)·hreflang·sitemap 포함 전부 정상. 위키 사이드바 자동 편입. 내부링크 11개 유효
+- 색인·순위는 향후 2~6주 형성 예상 → GSC 추세 모니터(일일 대시보드에 earth2guide 포함)
+
+### 후속(대기)
+- (선택) earth2-status-2026을 주간 autonews에 연동 → 타임라인·날짜 자동 갱신(신선도 유지)
+- 리포트: 프로젝트 루트 `SEO_KEYWORD_PLAN_2026-06-14.html`
+- ZH는 구글 TW/HK 대상. Baidu(중국 본토)·Naver는 별도 트랙(이번 범위 밖)
+
 ## 2026-06-06 (세션 11d) — AIO 후속: About/법적 페이지 + 위키 FAQ + 용어집 (의도 기록)
 
 ### What
@@ -468,17 +539,25 @@ DISCORD_CHANNEL_ANNOUNCEMENTS, DISCORD_CHANNEL_DEV_QA, DISCORD_SHANE_USER_ID
 - 잔여 translate_progress 4파일(reality-thread-8, e2v1-update-0-5-8-2 의 ko/zh)은 점검 결과 둘 다 이미 **published** (body_ko/zh 정상, `[IMAGE:` 잔재 없음, published_at 설정됨) — 무해한 잔재이며 미처리 작업 아님.
 - ⚠️ 운영 메모(다음 런): ① earth2.io/news가 클라이언트 렌더 + WordPress REST 13건/페이지 방식으로 동작 → step1(브라우저 LOAD MORE)은 networkidle로도 13건만 수집됨(과거 156건 수집과 거동 달라짐). 이번엔 SPA가 호출하는 원본 API `public-api.wordpress.com/rest/v1.1/sites/195754016/posts?number=100&offset=N` 를 브라우저 컨텍스트로 직접 조회해 156건 확정 (news_links.json source=wordpress-api). → **step1을 WP API 방식으로 교체 권장** (Alvin 승인 후 코드 변경). ② 샌드박스 `/sessions` 볼륨 100% full(옛 세션 280+개 누적) → pip/chromium을 root fs로 우회 설치 필요: `PLAYWRIGHT_BROWSERS_PATH=/var/tmp/ms-playwright`, `TMPDIR=/tmp`.
 
+## 2026-06-14 (auto-news run)
 
-## 2026-06-12 (session — 색인 stale 캐시 픽스 + step1 WP API 교체)
+- **신규 0건.** WordPress REST API `found=156` == data/index.json 156 == Supabase posts status=published 156 (3자 완전 일치). publish 0 / draft 잔류 0 / 실패 0. (run: 2026-06-14, source=wordpress-api)
+- 브라우저(chromium) 미설치 — NEW 0이라 step2~4 미진입 (런북 §0/§1대로 조기 종료).
+- ⚠️ 운영 메모: MIGRATION_PROGRESS.md(2026-06-14) — Cloudflare static 전환 진행 중, Gemini 파이프라인 폐기 + 신규 공지는 Claude Schedule(수집→번역→MD→git→배포)로 이관 예정. 이번 런은 신규 0이라 DB/스크랩 무접촉 → 런북(Supabase) 경로와 충돌 없음. **다음 신규 공지 발생 시 이 auto-news 런북이 마이그레이션 후 방식과 일치하는지 Alvin 확인 권장.**
 
-### 색인 픽스 (web, 배포됨 — commit `17ec07b`, dpl `CGGgyij5...` READY)
-- **증상**: 크롤러가 색인하는 정규 URL `/ko`·`/zh`(bare)가 옛 빌드 캐시에 고정 — 옛 타이틀 `Earth2Guide | Earth2Guide`, 빈 Official 섹션, 더미 푸터(Discord/Twitter `#`), 옛 `/news/` 내부링크 노출. 반면 `/`(→308 `/ko`)·`/ko?query`는 정상 렌더 → 코드·배포는 정상이었고 full-route 캐시만 stale.
-- **원인**: 수정 커밋 `d990771`(타이틀·경로통일·Official 픽스)이 빌드 ERROR로 한 번 죽었고, 이후 정상 배포(`9234a6f`→`deb1545`)에도 `/ko`·`/zh` 캐시가 3+ 배포 동안 안 풀림.
-- **조치**: `app/[locale]/{page, news/page, official/page, wiki/page}.tsx` → `revalidate=300` 제거하고 `export const dynamic='force-dynamic'`. 항상 SSR 렌더라 stale 정적 캐시 차단 + 재발 방지. 저트래픽이라 서버 비용 무시 가능.
-- **검증**: bare `/ko`·`/zh` 라이브 — 정상 타이틀·Official 채워짐·`/official/` 경로·실 푸터 확인.
-- 미해결(백로그): `/zh` 히어로 배지·리퍼럴 배너 i18n 한국어 잔존.
+## 2026-06-14 (Cloudflare 이관 — 세션 12)
 
-### step1 WP API 교체 (pipeline, 로컬 전용 — `pipeline/` gitignore라 커밋 대상 아님)
-- 기존 Playwright "LOAD MORE" → earth2.io 변경(클라 렌더 + WP REST 13건/page)으로 13건만 수집되던 문제. `scrapers/step1_collect_links.py`를 `public-api.wordpress.com/rest/v1.1/sites/195754016/posts` 페이지네이션 직접 호출로 교체(Playwright/chromium 불필요). 백업 `step1_collect_links.py.bak-20260612`.
-- 테스트(샌드박스): 156건 전량 수집, slug/shape 6/12 결과와 동일, NEW(vs `data/index.json`)=0. **월요일(6/15) 자동런부터 적용** — 별도 배포 불필요(로컬 스크립트).
-- 런북 `docs/AUTO_NEWS_RUNBOOK.md` §0/§1 갱신: discovery 무브라우저(~5s), chromium은 NEW slug 있어 step2 돌릴 때만 root fs(`PLAYWRIGHT_BROWSERS_PATH=/var/tmp/ms-playwright`)에 설치 → `/sessions` 디스크 풀 회피. (현재 디스크 / 63%, /sessions 73% 여유.)
+**Vercel+Supabase → CF Pages 정적 완전 이관. 라이브 검증 완료. commit f43b5ce (web/).**
+
+- feat: `next.config` output:export + images.unoptimized
+- feat: `web/lib/content.ts` 파일 기반 로더 (Supabase 런타임 쿼리 대체, 시그니처 동일)
+- feat: `web/content/{posts,wiki}/{ko,zh}/*.md` 354 + manifest.json (id·created_at)
+- feat: 정적 클라이언트 검색 (`public/search-index.json` + SearchClient)
+- feat: `web/public/_redirects` 140룰 (WP 레거시 308 + `/`→`/ko` + wiki→overview). 생성기 `gen_redirects.py`
+- refactor: 페이지 8개 정적화 (setRequestLocale, force-dynamic/searchParams 제거, redirect→notFound, 클라 페이지네이션)
+- chore: admin·middleware·supabase 클라이언트(server/client/static/queries)·Gemini 제거
+- chore: `/news/[slug]` 라우트 삭제 (전 포스트 official segment)
+- fix: robots.ts·sitemap.ts `force-static` (output:export 호환)
+- deploy: CF Pages `earth2guide` direct-upload(wrangler) → earth2guide.com 도메인 전환(apex+www CNAME, 인증서 active)
+- feat: 주간 자동화 Scheduled task `earth2guide-weekly-autonews` + 헬퍼 cf_detect_new/cf_mirror_image/cf_publish
+- chore: Supabase·Vercel 프로젝트 삭제(Alvin), 잔여 Vercel DNS(와일드카드·_domainconnect) 정리
