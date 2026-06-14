@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
 import { JsonLd, siteGraph } from '@/components/seo/JsonLd'
 import { Footer } from '@/components/layout/Footer'
+import { ReferralBar } from '@/components/referral/ReferralBar'
 
 // static export: [locale] 전부 prerender
 export function generateStaticParams() {
@@ -60,6 +61,7 @@ export default async function LocaleLayout({
       <JsonLd data={siteGraph(locale)} />
       <Header />
       <main className="flex-1 pt-16">
+        <ReferralBar />
         {children}
       </main>
       <Footer locale={locale} />

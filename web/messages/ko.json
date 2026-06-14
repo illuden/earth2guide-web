@@ -16,8 +16,14 @@
     "searchPlaceholder": "뉴스, 위키, 공지 검색..."
   },
   "referral": {
-    "earth2": "Earth 2 가입 시 리퍼럴 코드 00000 입력 → 7.5% 할인",
-    "cta": "지금 시작하기"
+    "badge": "Exclusive Offer",
+    "headline": "어스2 신규 Land 구매 시 7.5% 할인",
+    "instruction": "결제 마지막 단계에서 아래 리퍼럴 코드를 입력하면 구매자도 7.5% 할인을 받습니다.",
+    "codeLabel": "리퍼럴 코드",
+    "barText": "어스2 신규 Land 구매 시 리퍼럴 코드 {code} 입력 → 7.5% 할인",
+    "copy": "복사",
+    "copied": "복사됨!",
+    "cta": "어스2 시작하기"
   },
   "search": {
     "placeholder": "검색어를 입력하세요...",

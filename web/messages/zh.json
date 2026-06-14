@@ -16,8 +16,14 @@
     "searchPlaceholder": "搜索资讯、百科、公告..."
   },
   "referral": {
-    "earth2": "注册 Earth 2 时输入推荐码 00000 → 享受 7.5% 折扣",
-    "cta": "立即开始"
+    "badge": "Exclusive Offer",
+    "headline": "购买 Earth 2 新土地享 7.5% 折扣",
+    "instruction": "在结算最后一步输入以下推荐码，买家同样可获得 7.5% 折扣。",
+    "codeLabel": "推荐码",
+    "barText": "购买 Earth 2 新土地时输入推荐码 {code} → 享 7.5% 折扣",
+    "copy": "复制",
+    "copied": "已复制！",
+    "cta": "开始使用 Earth 2"
   },
   "search": {
     "placeholder": "请输入搜索词...",
