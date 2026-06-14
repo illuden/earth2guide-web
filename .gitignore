@@ -112,3 +112,6 @@ env/
 *.swp
 TODO.local.md
 NOTES.local.md
+
+# CF Pages는 Linux에서 npm install로 빌드 ? 크로스플랫폼 네이티브 의존성 mismatch 회피
+package-lock.json
