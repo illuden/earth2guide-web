@@ -39,7 +39,7 @@ export default async function PrivacyPage({ params }: PageProps) {
           </p>
           <h2 className={H2}>제3자 서비스</h2>
           <p className={P}>
-            호스팅(Vercel), 이미지 저장(Cloudflare), 통계(Google Analytics)를 사용하며 각 서비스의
+            호스팅(Cloudflare Pages), 이미지 저장(Cloudflare R2), 통계(Google Analytics)를 사용하며 각 서비스의
             개인정보 정책이 적용될 수 있습니다. 외부 링크(earth2.io 등) 방문 시 해당 사이트의 정책을 따릅니다.
           </p>
         </>
@@ -53,7 +53,7 @@ export default async function PrivacyPage({ params }: PageProps) {
           </p>
           <h2 className={H2}>Cookie 与第三方服务</h2>
           <p className={P}>
-            除 Google Analytics 外，本站不使用自有跟踪 Cookie。本站使用 Vercel（托管）、Cloudflare（图片存储）、
+            除 Google Analytics 外，本站不使用自有跟踪 Cookie。本站使用 Cloudflare Pages（托管）、Cloudflare R2（图片存储）、
             Google Analytics（统计），各服务适用其自身隐私政策。访问外部链接（如 earth2.io）时适用对方网站政策。
           </p>
         </>

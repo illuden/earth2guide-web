@@ -52,7 +52,7 @@ const { locale, slug } = await params  // await 필수
 | 모노레포 구조 | `../ARCHITECTURE.md` |
 | AI 작업 가이드 | `../CLAUDE.md` |
 | 환경변수 | `.env.local` (anon, R2 public만) |
-| DB 쿼리 | `lib/supabase/queries.ts` |
+| 콘텐츠 로더 | `lib/content.ts` (정적 MD, DB 아님) |
 | 라우팅 | `app/[locale]/...`  |
 | i18n config | `i18n/routing.ts` |
 | 디자인 토큰 | `Design.md` + `app/globals.css` |

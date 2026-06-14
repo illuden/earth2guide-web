@@ -18,10 +18,10 @@
 
 ## 2. 배포 모델 ★먼저 읽기
 
-- **배포 = git push + CF API 배포 트리거 (2단계).** git 프로젝트 = **`earth2guide-web`** (GitHub `illuden/earth2guide-web`).
+- **배포 = git push 자동배포** (CF 네이티브 webhook, 2026-06-15 검증). git 프로젝트 = **`earth2guide-web`** (GitHub `illuden/earth2guide-web`).
   - ① `git add/commit/push origin main` — 버전관리 + 배포 소스
-  - ② CF 빌드 트리거: `POST /accounts/{acct}/pages/projects/earth2guide-web/deployments` (토큰 = 루트 `.env`) → CF 클라우드가 빌드·배포
-- ⚠️ **git push 자체로는 자동배포 안 됨** (CF 네이티브 webhook이 push 이벤트를 안 받음 → 미사용). 반드시 API로 트리거. **주간 자동화는 ①②를 함께 자동 수행.**
+  - ② push하면 CF가 자동으로 최신 main을 빌드·배포 (네이티브 webhook). 별도 조작 불필요.
+- ✅ **2026-06-15 검증**: 최근 배포 3건 전부 `github:push` 트리거. CF API 트리거(`POST .../deployments`, 토큰=루트 `.env`)는 이제 **선택적 폴백**(webhook 미발화 시). 주간 자동화는 안전차원에서 API 트리거도 함께 수행(중복이나 무해).
 - 빌드: CF 클라우드 root=`web`, `npm install` + `npm run build`, output `out`, node 22. **빌드 깨지면 미배포(라이브 보존).**
 - `package-lock.json`은 **의도적으로 git 미추적**(gitignore) — CF가 `npm install`로 크로스플랫폼 네이티브 의존성 해결. 로컬 dev lock은 디스크에 남음.
 - web/ 코드 변경 시 로컬 빌드 선검증 권장: Windows `cd web && npm run build`.

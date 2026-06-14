@@ -100,9 +100,9 @@ earth2guide.com 반영
 
 ## 빌드 / 배포 ★핵심
 
-- **방식: Cloudflare Pages git 프로젝트 `earth2guide-web`** (GitHub `illuden/earth2guide-web` 연결) **+ 명시적 배포 트리거.**
-  - git push = **버전관리 + 배포 소스**. 배포는 **CF API로 빌드 트리거**: `POST /accounts/{acct}/pages/projects/earth2guide-web/deployments` → CF 클라우드가 최신 main을 빌드.
-  - ⚠️ **git push 자체로는 자동배포 안 됨** — CF 네이티브 webhook이 push 이벤트를 안 받아 **미사용**. 배포는 항상 API 트리거(주간 자동화 STEP 5 / Claude가 push 직후 실행).
+- **방식: Cloudflare Pages git 프로젝트 `earth2guide-web`** (GitHub `illuden/earth2guide-web` 연결) **+ main push 자동배포.**
+  - git push = **버전관리 + 배포 소스 + 배포 트리거**. push하면 CF 네이티브 webhook이 최신 main을 자동 빌드·배포. (수동 트리거 필요 시: `POST /accounts/{acct}/pages/projects/earth2guide-web/deployments`.)
+  - ✅ **2026-06-15 검증**: 최근 배포 3건 전부 `github:push` 트리거 — push만으로 자동배포 정상. CF API 트리거는 **선택적 폴백**(webhook 미발화 시). 세션14 'webhook 미작동'은 git 프로젝트 초기 프로비저닝 지연이었고 컷오버 직후 정상화.
   - 의존성 설치 = **`npm install`** (lockfile은 의도적으로 git 미추적 → 크로스플랫폼 네이티브 의존성 자동 해결).
 - **CF 빌드 설정**:
   - production branch: `main`
@@ -119,7 +119,7 @@ earth2guide.com 반영
 - 빌드 실패 시 미배포 → **라이브 보존**(이전 배포 유지).
 - 캐시: 배포 후 루트 URL은 잠깐 구버전 CDN 캐시일 수 있음(`?cb=` 쿼리로 우회 확인). 현재 CF 토큰엔 **Cache Purge 권한 없음** — 새 배포가 캐시 갱신.
 
-> ⚠️ **배포 2단계 의식**: ① `git commit`/`push`(기록) ② CF API 배포 트리거(반영). 둘 다 해야 라이브 반영. 주간 자동화는 이 둘을 함께 수행.
+> ✅ **배포 = push 자동**(2026-06-15 검증): `git push origin main` 하면 CF가 자동 빌드·배포. CF API 트리거는 선택적 폴백. 주간 자동화는 안전차원에서 API 트리거도 함께 수행(중복·무해).
 
 ---
 
