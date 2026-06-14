@@ -18,14 +18,17 @@
 
 ## 2. 배포 모델 ★먼저 읽기
 
-- **`main` push = Cloudflare Pages 자동 빌드·배포.** 별도 배포 명령 불필요.
-- 즉 **커밋·push 전 항상 "이게 라이브로 나간다"를 의식**. web/ 변경을 push하면 곧 라이브 반영.
-- 빌드는 CF 클라우드: root=`web`, `npm run build`, output `out`, node 22. **빌드 깨지면 무배포(라이브 보존).**
-- web/ 코드 변경 시 **로컬 빌드 선검증 권장**: Windows에서 `cd web && npm run build`.
-- 롤백: CF 대시보드 → 이전 배포 Rollback, 또는 `git revert` + push.
-- 비상 수동 배포(연결 장애 시): `npx wrangler pages deploy out --project-name=<도메인 보유 프로젝트> --branch=main`.
+- **배포 = git push + CF API 배포 트리거 (2단계).** git 프로젝트 = **`earth2guide-web`** (GitHub `illuden/earth2guide-web`).
+  - ① `git add/commit/push origin main` — 버전관리 + 배포 소스
+  - ② CF 빌드 트리거: `POST /accounts/{acct}/pages/projects/earth2guide-web/deployments` (토큰 = 루트 `.env`) → CF 클라우드가 빌드·배포
+- ⚠️ **git push 자체로는 자동배포 안 됨** (CF 네이티브 webhook이 push 이벤트를 안 받음 → 미사용). 반드시 API로 트리거. **주간 자동화는 ①②를 함께 자동 수행.**
+- 빌드: CF 클라우드 root=`web`, `npm install` + `npm run build`, output `out`, node 22. **빌드 깨지면 미배포(라이브 보존).**
+- `package-lock.json`은 **의도적으로 git 미추적**(gitignore) — CF가 `npm install`로 크로스플랫폼 네이티브 의존성 해결. 로컬 dev lock은 디스크에 남음.
+- web/ 코드 변경 시 로컬 빌드 선검증 권장: Windows `cd web && npm run build`.
+- 롤백: CF 대시보드 → 이전 배포 Rollback, 또는 `git revert` + push + 재트리거.
+- 배포 후 루트 URL은 CDN 캐시로 잠깐 구버전일 수 있음(`?cb=` 쿼리로 우회 확인). 현 토큰엔 Cache Purge 권한 없음 — 새 배포가 캐시 갱신.
 
-> 전환 작업의 현재 진행 상태는 **CONTEXT.md** 확인. (컷오버 완료 전 임시 상태가 있으면 거기에 명시)
+> 현재 상태·잔여 작업은 **CONTEXT.md** 확인.
 
 ---
 
@@ -96,15 +99,14 @@ cd C:\Users\eldin\Desktop\Claude\Projects\Claude-Workspace\projects\earth2guide\
 npm run dev
 npm run build          # out/ 생성 — 배포 전 로컬 검증
 
-# 배포 = git push (CF가 자동 빌드·배포)
+# 배포 = ① git push  ② CF API 빌드 트리거 (둘 다 필요)
 cd ..
 git add .
 git commit -m "feat: ..."
 git push origin main
-
-# 비상 수동 배포 (CF 연결 장애 시)
-cd web
-npx wrangler pages deploy out --project-name=<도메인 보유 프로젝트> --branch=main
+# ② CF 빌드 트리거 (토큰은 .env에서 로드, 출력 금지):
+#   POST https://api.cloudflare.com/client/v4/accounts/$ACCT/pages/projects/earth2guide-web/deployments
+#   → deployments?per_page=1 폴링해서 latest_stage.status = success 확인
 ```
 
 ---
@@ -112,7 +114,7 @@ npx wrangler pages deploy out --project-name=<도메인 보유 프로젝트> --b
 ## 9. 진행 중 / 대기 (상세 → CONTEXT.md, DECISIONS.md)
 
 - ✅ Cloudflare Pages 정적 이관 완료 (2026-06-14)
-- ✅ git 자동배포 전환 (CF ↔ GitHub 네이티브) — 진행 상태는 CONTEXT.md
+- ✅ git 배포 전환 — CF git 프로젝트 `earth2guide-web` + API 배포 트리거(Option C), 도메인 컷오버 완료 (2026-06-14)
 - ⬜ essence / 근황 페이지 GSC 색인·순위 모니터 (2~6주)
 - ⬜ 주간 자동화(`earth2guide-weekly-autonews`, 월 09:08) 첫 실행 확인
 - ⬜ (선택) `package.json` 미사용 `@supabase` 의존성 제거 · ZH 카드 '읽기' 라벨 i18n

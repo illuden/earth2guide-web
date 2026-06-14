@@ -1,46 +1,47 @@
 # earth2guide — Context
 
-**Last updated**: 2026-06-06 (세션 11)
-**Status**: 배포됨 (P1 라이브 운영 + 공지 자동화 가동)
+**Last updated**: 2026-06-14 (세션 14 — git 배포 전환: CF git 프로젝트 + API 트리거 + 도메인 컷오버)
+**Status**: 배포됨 (라이브 — **Cloudflare Pages 정적, git 프로젝트 `earth2guide-web`**)
 
 ## 한 줄 요약
-Earth 2 메타버스 KO/ZH 정보 허브 (https://earth2guide.com). News 154 + Wiki 21 published. 공지 자동 수집 스케줄 가동(월/목), SEO·AIO 기반 구축 완료.
+Earth 2 메타버스 KO/ZH 정보 허브 (https://earth2guide.com). Next.js `output:export` 정적, **CF Pages git 프로젝트**(`earth2guide-web`, GitHub illuden/earth2guide-web) 빌드. 콘텐츠 = 레포 MD(156 posts + 23 wiki). 런타임 DB 없음. **배포 = git push + CF API 빌드 트리거(Option C).** 신규 공지는 주간 Claude 스케줄.
 
-## 현재 상태
-- 완료 (세션 11, 2026-06-06):
-  - **공지 자동화**: 스케줄 `earth2guide-news-auto` (월/목 09:00, cron `0 9 * * 1,4`) — 런북 `pipeline/docs/AUTO_NEWS_RUNBOOK.md`. 검증 통과분 자동 publish, 실패는 draft+보고
-  - **step3/4 번역 스크립트 버그 fix** — 표·문단내 이미지 누락 (step6 패턴 차용, 백업 `scrapers/*.py.bak-20260606`)
-  - **SEO 픽스** (`d990771`+`9234a6f`): 사이트 전반 '어스2' 병기(타이틀 템플릿), news/official 경로 카테고리 기반 통일+308+canonical, 홈 Official 위젯 fix, ZH og:locale=zh_CN, 본문 잔재 정리([원문 1건+유령 [IMAGE:N] 15개)
-  - **AIO 기반** (`e44a30a`): JSON-LD(Organization/WebSite/NewsArticle/TechArticle+Breadcrumb), robots.txt AI봇 11종 Allow, llms.txt, 위키 meta 본문 발췌, ZH 위키 타이틀 'Earth2' 병기 10건
-  - **E-E-A-T** (`3544542`): /about /privacy /terms (KO/ZH), Footer 실링크, FAQ 마크다운 파서+FAQPage 스키마(가입/출금), **위키 신규 `glossary`**(용어 17개, KO/ZH)
-  - **SEO 경쟁 리포트**: `pipeline/docs/SEO_COMPETITIVE_2026-06-06.html` — KO/ZH 경쟁자·키워드 20·AIO 작업 기록
-- 진행 중: 없음 (세션 종료 시점)
-- 다음: 월요일(6/8) 자동 수집 첫 실행 결과 확인 → GSC 색인·GA4 유입 점검 → 백로그 재개
+## 현재 상태 (세션 14)
+- **배포 모델 전환 완료**: 구 direct-upload(wrangler) → **CF git 프로젝트 `earth2guide-web`**(GitHub 연결).
+  - 빌드: CF 클라우드, root=`web`, `npm install` + `npm run build`, out, node 22(`web/.node-version`). 빌드 env 4개(NEXT_PUBLIC_SITE_URL / REFERRAL_CODE / R2_PUBLIC_URL / DEFAULT_LOCALE) 설정됨.
+  - **배포 트리거 = CF API** (`POST /accounts/{acct}/pages/projects/earth2guide-web/deployments`). ⚠️ git push 네이티브 webhook **미작동** → 미사용. 배포는 항상 API로(자동화 / Claude가 push 직후).
+  - **lockfile git 미추적**(gitignore): Windows 생성 lock이 Linux 네이티브(@next/swc-linux, @parcel/watcher-linux) 누락 → CF `npm install`로 해결. 로컬 dev lock은 디스크 유지.
+- **도메인 컷오버 완료**: `earth2guide.com` + `www` = **earth2guide-web 프로젝트에 연결**(둘 다 active). 구 프로젝트(earth2guide)는 도메인 0(폴백 보존). DNS CNAME → `earth2guide-web.pages.dev`. 라이브 검증: earth2guide.com/ko HTTP 200 + 신규 콘텐츠(상세 리퍼럴 배너 + 00000 복사) 서빙 확인.
+- **주간 자동화 갱신**: `earth2guide-weekly-autonews` STEP4/5 = git push + CF API 트리거(로컬 빌드·wrangler 제거).
+- 진행 중: 없음.
+- 다음: ① 월요일(6/15) 자동화 첫 실행 확인(push + CF API 트리거 동작?) ② essence/근황 GSC 색인·순위 2~6주 ③ **P6(1주 후): 구 earth2guide 프로젝트 삭제 + 와일드카드/_domainconnect DNS 정리**.
 
-## 핵심 인사이트 (SEO 전략)
-- KO/ZH 어스2 시장 모두 무주공산 — 경쟁자 전원 2025년 초 이전 정지, 우리가 유일한 2026 발행자
-- 한국 유저는 "어스2", 중국어권은 영문 "Earth2"로 검색 (地球2는 노이즈) — 타이틀 병기 완료
-- 간체 유지, 번체 전환은 GSC에서 TW/HK 유입 확인 후 판단
-- 남은 랭킹 변수: 색인 시간(수 주) + 백링크(현재 0)
+## SEO/GSC 메모 (세션 13, 변동 없음)
+- 타겟 키워드(어스2 에센스·코인·근황) GSC 노출 0, `어스2 출금`=5.5위 → 전용 페이지 전략. essence/근황 위키 신설됨. 색인 2~6주 모니터.
+- 리포트: 루트 `SEO_KEYWORD_PLAN_2026-06-14.html`, `MIGRATION_AUDIT_2026-06-14.html`.
 
 ## 기술 스택
-- Next.js 16.2.3 (Turbopack) / Tailwind v4 / Supabase / Vercel (root=`web/`) / Cloudflare R2 / Gemini 2.0 Flash
-- GA4 `G-F0PYH6DYLW` + GSC (sitemap 362 URL — 358+about/glossary)
-- Live = `dpl_BEdvtghY` (commit `3544542`)
+- Next.js `output:export` / next-intl v4(`setRequestLocale`) / Tailwind v4 / **CF Pages git 프로젝트 `earth2guide-web`** / R2(`e2korea`, `pub-60a5d261178e40e98b04d0c1a4bbcaea.r2.dev`)
+- GA4 `G-F0PYH6DYLW` + GSC(URL-접두어·HTML태그) + Naver
+- repo: GitHub `illuden/earth2guide-web` (web/만 추적; pipeline/·data/·_backup/·**package-lock.json** gitignore)
 
 ## 주요 파일·디렉토리
-- `web/components/seo/JsonLd.tsx` — 모든 구조화 데이터 + FAQ 파서 + mdExcerpt
-- `web/lib/supabase/types.ts` — `getPostSegment()` (카테고리→경로 단일 소스)
-- `pipeline/docs/AUTO_NEWS_RUNBOOK.md` — 자동화 런북 (스케줄러가 읽음)
-- `pipeline/docs/SEO_COMPETITIVE_2026-06-06.html` — 경쟁·키워드·AIO 리포트
-- `pipeline/CHANGELOG.md` — 세션 11a~11d 전체 기록
+- `web/lib/content.ts` — 파일 기반 데이터 로더
+- `web/content/{posts,wiki}/{ko,zh}/*.md` + `manifest.json` — 콘텐츠
+- `web/lib/referral.ts` — 리퍼럴 코드 단일소스
+- `web/.node-version` — `22` (CF 빌드 node 핀)
+- `web/public/_redirects`, `web/public/search-index.json`
+- `pipeline/cf_detect_new.py`/`cf_mirror_image.py`/`cf_publish.py` — 자동화 헬퍼(로컬)
+- `_backup/` — posts/wiki/discord 유일 백업(로컬, gitignore)
 
 ## ⚠️ 운영 주의
-1. git 쓰기/fetch는 **Windows PowerShell** (샌드박스 마운트 unlink 불가)
-2. **샌드박스 bash는 호출마다 컨테이너 초기화** — 백그라운드 프로세스 생존 X. 장시간 작업은 checkpoint 재실행 방식 (런북 반영됨)
-3. Vercel 자동배포 ON — main push = 즉시 배포. generateStaticParams에서 cookies() 쓰는 쿼리 사용 금지 (createStaticClient 사용)
-4. 위키에 `## 자주 묻는 질문` 섹션 쓰면 FAQPage 스키마 자동 생성
-5. 스케줄 작업은 앱 켜져 있을 때 실행. 첫 실행 전 "Run now"로 권한 사전 승인 권장
+1. **배포는 2단계**: ① `git push` ② CF API 배포 트리거. **push만으론 라이브 안 바뀜**(네이티브 webhook 미사용).
+2. **파일·git 검증은 Windows(PowerShell) 또는 Read 툴** — 샌드박스 bash는 이 repo서 NUL·git index 깨짐 **허위 보고**(virtiofs). git 쓰기·push도 Windows.
+3. `package-lock.json` 미추적(gitignore) — **커밋 금지**. CF는 `npm install`로 빌드.
+4. `_backup/` 삭제 금지.
+5. CF 토큰(루트 `.env`): Pages·R2·Zone 일부 OK, **Cache Purge 권한 없음**. 배포 후 루트 URL 캐시는 새 배포가 갱신(`?cb=`로 우회 확인).
+6. 구 `earth2guide` 프로젝트 = 폴백(도메인 0). **1주 후 삭제 예정** — 그 전엔 두기(롤백 대비).
+7. 보존 용어 영문 유지. slug 영문 고정. 전 포스트 official segment(`/news/[slug]` 라우트 삭제됨).
 
 ## 세션 재개 시 첫 행동
-월요일 자동 수집 결과 확인 (CHANGELOG의 auto-news run 항목) + GSC 색인 상태. 이상 없으면 백로그: Step 10 소식 탭 UI / Step 11 SEO meta 잔여 / 백링크 활동.
+월요일 자동화(`earth2guide-weekly-autonews`) 첫 실행 결과 확인(git push + CF API 트리거가 정상 동작했는지) + essence/근황 GSC 색인 추세. (P6: CF 1주 안정 후 구 `earth2guide` 프로젝트 삭제 + 와일드카드 DNS 정리.)

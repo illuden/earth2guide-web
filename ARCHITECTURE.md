@@ -100,7 +100,10 @@ earth2guide.com 반영
 
 ## 빌드 / 배포 ★핵심
 
-- **방식: Cloudflare Pages ↔ GitHub 네이티브 연결.** `main` push → CF가 클라우드에서 빌드·배포. (구 wrangler 다이렉트 업로드 폐기)
+- **방식: Cloudflare Pages git 프로젝트 `earth2guide-web`** (GitHub `illuden/earth2guide-web` 연결) **+ 명시적 배포 트리거.**
+  - git push = **버전관리 + 배포 소스**. 배포는 **CF API로 빌드 트리거**: `POST /accounts/{acct}/pages/projects/earth2guide-web/deployments` → CF 클라우드가 최신 main을 빌드.
+  - ⚠️ **git push 자체로는 자동배포 안 됨** — CF 네이티브 webhook이 push 이벤트를 안 받아 **미사용**. 배포는 항상 API 트리거(주간 자동화 STEP 5 / Claude가 push 직후 실행).
+  - 의존성 설치 = **`npm install`** (lockfile은 의도적으로 git 미추적 → 크로스플랫폼 네이티브 의존성 자동 해결).
 - **CF 빌드 설정**:
   - production branch: `main`
   - root directory: `web`
@@ -112,11 +115,11 @@ earth2guide.com 반영
   - `NEXT_PUBLIC_REFERRAL_CODE` = 00000
   - `NEXT_PUBLIC_R2_PUBLIC_URL` = https://pub-60a5d261178e40e98b04d0c1a4bbcaea.r2.dev
   - `NEXT_PUBLIC_DEFAULT_LOCALE` = ko
-- **롤백**: CF 대시보드 → 이전 배포 Rollback, 또는 `git revert` + push.
-- 빌드 실패 시 자동배포 안 됨 → **라이브 보존**.
-- 비상 수동 배포(연결 장애 시): `npx wrangler pages deploy out --project-name=<proj> --branch=main` (CF 토큰 = 루트 `.env`).
+- **롤백**: CF 대시보드 → 이전 배포 Rollback, 또는 `git revert` + push + 재트리거.
+- 빌드 실패 시 미배포 → **라이브 보존**(이전 배포 유지).
+- 캐시: 배포 후 루트 URL은 잠깐 구버전 CDN 캐시일 수 있음(`?cb=` 쿼리로 우회 확인). 현재 CF 토큰엔 **Cache Purge 권한 없음** — 새 배포가 캐시 갱신.
 
-> ⚠️ git push = 빌드·배포 트리거. 문서만 바꿔 push해도 빌드 1회 돔(무해). 빈번하면 CF에서 빌드 경로 필터 설정.
+> ⚠️ **배포 2단계 의식**: ① `git commit`/`push`(기록) ② CF API 배포 트리거(반영). 둘 다 해야 라이브 반영. 주간 자동화는 이 둘을 함께 수행.
 
 ---
 
