@@ -16,6 +16,12 @@ Earth 2 메타버스 KO/ZH 정보 허브 (https://earth2guide.com). Next.js `out
 - 진행 중: 없음.
 - 다음: ① 월요일(6/15) 자동화 첫 실행 확인(push + CF API 트리거 동작?) ② essence/근황 GSC 색인·순위 2~6주 ③ **P6(1주 후): 구 earth2guide 프로젝트 삭제 + 와일드카드/_domainconnect DNS 정리**.
 
+## ★ 목표 (보류 — Alvin 기대치, 당장 X)
+**git push = CF 자동 트리거** 구조. Alvin이 원하는 최종형 = CF Builders ↔ Git 네이티브 연결로 `git push` 하면 자동 빌드·배포(2단계 API 트리거 불필요).
+- 현재: 네이티브 webhook이 push 이벤트를 안 받아 **Option C(push 후 CF API 명시 트리거)**로 우회 중. 기능은 동일하나 트리거가 자동이 아님.
+- 해결 옵션: **(a)** GitHub의 Cloudflare Pages 앱 webhook 재연결/권한 재승인 디버깅(네이티브 유지) · **(b)** GitHub Actions(push→빌드→wrangler 배포, CF 토큰을 GH 시크릿에). (b)가 가장 확실.
+- 시점: Alvin이 결정. 지금은 보류.
+
 ## SEO/GSC 메모 (세션 13, 변동 없음)
 - 타겟 키워드(어스2 에센스·코인·근황) GSC 노출 0, `어스2 출금`=5.5위 → 전용 페이지 전략. essence/근황 위키 신설됨. 색인 2~6주 모니터.
 - 리포트: 루트 `SEO_KEYWORD_PLAN_2026-06-14.html`, `MIGRATION_AUDIT_2026-06-14.html`.
