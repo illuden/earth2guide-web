@@ -2416,6 +2416,28 @@
    "title_zh": "Earth2 术语表",
    "created_at": "2026-06-06T12:28:01.1099+00:00",
    "updated_at": "2026-06-06T12:28:01.1099+00:00"
+  },
+  {
+   "id": "essence",
+   "slug": "essence",
+   "category": "ecosims",
+   "sort_order": 2,
+   "status": "published",
+   "title_ko": "어스2 에센스(Essence·ESS) — 뜻·채굴·시세 완벽 가이드",
+   "title_zh": "Earth2 Essence($ESS) 完全指南 — 含义·获取·价格",
+   "created_at": "2026-06-14T09:30:00+00:00",
+   "updated_at": "2026-06-14T09:30:00+00:00"
+  },
+  {
+   "id": "earth2-status-2026",
+   "slug": "earth2-status-2026",
+   "category": "overview",
+   "sort_order": 3,
+   "status": "published",
+   "title_ko": "어스2(Earth 2 메타버스) 근황·현황 2026 — E2V1·업데이트·에센스 총정리",
+   "title_zh": "Earth2 近况·现状 2026 — E2V1·更新·Essence 总整理",
+   "created_at": "2026-06-14T09:30:00+00:00",
+   "updated_at": "2026-06-14T09:30:00+00:00"
   }
  ]
 }
