@@ -1,243 +1,159 @@
 # ARCHITECTURE — earth2guide
 
-> 전체 시스템 한 페이지. 자세한 핸드오프는 `pipeline/docs/HANDOFF.md`.
+> 전체 시스템 한 페이지. **2026-06-14 Cloudflare Pages 정적 이관 + git 자동배포** 반영.
+> 변경 이력 → `DECISIONS.md` · 세션 흐름 → `sessions/` · 현재 상태 → `CONTEXT.md`.
+
+---
+
+## 한 줄 요약
+
+Earth 2 메타버스 **KO/ZH 정보 허브**. Next.js `output:'export'` **정적 사이트**, **Cloudflare Pages** 호스팅, 콘텐츠는 레포 안의 **마크다운**. 런타임 서버·DB 없음. 신규 공지는 주간 Claude 자동화가 MD를 커밋·push하면 **CF가 자동 빌드·배포**.
 
 ---
 
 ## 모노레포 구조
 
+루트(= git repo root): `C:\Users\eldin\Desktop\Claude\Projects\Claude-Workspace\projects\earth2guide\`
+GitHub: `illuden/earth2guide-web` (이제 **배포 소스**)
+
 ```
-C:\Users\eldin\Desktop\earth2guide\
+earth2guide/
+├── ARCHITECTURE.md / CLAUDE.md / CONTEXT.md / DECISIONS.md   ← 문서 (레포 추적)
+├── .git/                       ← 단일 git
 │
-├── README.md          ← 프로젝트 개요 + 빠른 시작
-├── ARCHITECTURE.md    ← 이 문서 (시스템 구조)
-├── CLAUDE.md          ← AI 작업 가이드
-├── .env.example       ← 환경변수 키 가이드 (실값 X)
-├── .gitignore         ← 대용량/민감 파일 보호
-├── .git/              ← 모노레포 단일 git (GitHub: illuden/earth2guide-web)
+├── web/                        ← ★CF Pages 빌드 대상 (root directory)
+│   ├── .node-version           ← 22 (CF 빌드 node 핀)
+│   ├── next.config.ts          ← output:'export' + images.unoptimized
+│   ├── content/                ← ★콘텐츠 소스 (레포 = DB 대체)
+│   │   ├── posts/{ko,zh}/*.md   (156×2)
+│   │   ├── wiki/{ko,zh}/*.md    (23×2)
+│   │   └── manifest.json        (리스트·사이트맵 메타)
+│   ├── lib/
+│   │   ├── content.ts           ← 파일 기반 데이터 로더 (프론트매터 자체 파서, 의존성 0)
+│   │   ├── referral.ts          ← 리퍼럴 코드 단일 소스
+│   │   └── supabase/types.ts    ← Post 타입 + getPostSegment + CATEGORY_META (이름만 잔존, DB 클라이언트 아님)
+│   ├── app/                     ← App Router (i18n ko/zh, static export)
+│   ├── components/              ← UI (news/official/wiki/search/referral)
+│   ├── messages/                ← UI 번역 ko.json / zh.json
+│   ├── public/
+│   │   ├── _redirects           ← WP 레거시 308 (135 룰)
+│   │   └── search-index.json    ← 정적 검색 인덱스
+│   └── .env.local               ← 빌드 공개값 NEXT_PUBLIC_* (gitignore)
 │
-├── web/               ← Vercel 빌드 대상 (Next.js)
-│   ├── app/           ← App Router (i18n: ko/zh)
-│   ├── components/    ← UI 컴포넌트
-│   ├── lib/supabase/  ← DB 쿼리/클라이언트
-│   ├── messages/      ← UI 번역 (ko.json, zh.json)
-│   ├── .env.local     ← 빌드/런타임 키 (anon, R2 public)
-│   └── ...
+├── pipeline/                   ← 로컬 전용 자동화 헬퍼 (gitignore · 배포 무관)
+│   ├── cf_detect_new.py         ← earth2.io WordPress API diff (신규 탐지)
+│   ├── cf_mirror_image.py       ← 이미지 R2(e2korea) 업로드
+│   ├── cf_publish.py            ← MD + manifest + search-index 갱신
+│   └── .env.local               ← R2 쓰기 시크릿 등 (gitignore)
 │
-├── pipeline/          ← Python 스크립트 + Discord 아카이브 + 문서
-│   ├── scrapers/
-│   │   ├── step1_collect_links.py     ← earth2.io/news 링크 수집
-│   │   ├── step2_scrape_articles.py   ← 본문/이미지 R2 업로드
-│   │   ├── step3_translate_and_ingest.py  ← EN→KO 번역 + DB 저장
-│   │   └── step4_translate_zh.py      ← EN→ZH 번역 + DB PATCH
-│   ├── check_db.py    ← DB 현황 확인
-│   ├── docs/          ← HANDOFF, CONTENT_PLAN 등 기획 문서
-│   ├── CHANGELOG.md   ← 진행 기록
-│   ├── .env.local     ← 서비스 키 (service_role, Gemini, R2 secret)
-│   └── (Discord JSON 아카이브 — git 무시)
-│
-└── data/              ← 스크래핑 캐시 (git 무시)
-    ├── articles/      ← 154개 EN 원본 JSON
-    ├── images/        ← 661개 R2 업로드 이미지 (로컬 사본)
-    ├── index.json
-    └── *_checkpoint.json
+└── _backup/                    ← posts/wiki/discord 유일 백업 (gitignore · 삭제 금지)
 ```
+
+**삭제된 동적 잔재** (이관 시): `app/admin`, `lib/actions`, `components/admin`, `middleware.ts`, `lib/supabase/{client,server,static,queries}.ts`.
 
 ---
 
 ## 데이터 흐름
 
-### News (posts)
+### 기존 콘텐츠 (박제)
+
+154+ EN 원본 → (과거 Gemini 번역, 검증·색인 완료) → **레포 MD로 동결**. **재번역 안 함** (SEO 보존).
+
+### 신규 공지 (주간 자동화)
 
 ```
-earth2.io/news
-  ↓ Playwright (step1, step2)
-data/articles/*.json + data/images/*
-  ↓ (R2 업로드 → wiki/news/* 661개)
-Cloudflare R2 (e2korea bucket)
-  ↓ (Gemini 2.0 Flash 번역, step3/step4)
-Supabase posts (status=draft → published)
-  ↓ (Vercel SSR/ISR)
-earth2guide.com (KO/ZH)
+earth2.io (WordPress REST API)
+  │  cf_detect_new.py        — diff, 신규 글만
+  ▼
+Claude 번역 (KO/ZH, 보존용어 유지)   — Cowork scheduled task
+  │  cf_mirror_image.py       — 이미지 → Cloudflare R2 (e2korea)
+  │  cf_publish.py            — web/content/*.md + manifest.json + search-index.json
+  ▼
+git commit + push (main)
+  ▼
+★ Cloudflare Pages 자동 빌드 (npm run build → out/) → 자동 배포
+  ▼
+earth2guide.com 반영
 ```
 
-### Wiki (wiki_pages, 세션 8 추가)
-
-```
-earth2.io/how-to (7 카테고리, 20 페이지)
-  ↓ Playwright (step5_howto_scraper)
-data/wiki/*.json + data/wiki_images/* (191개)
-  ↓ (R2 업로드 → wiki/*)
-Cloudflare R2 (e2korea bucket)
-  ↓ (Gemini 2.0 Flash 번역, step6_translate_wiki — KO+ZH)
-Supabase wiki_pages (status=published)
-  ↓ (step7_inject_images — 이미지 마크다운 위치 매핑)
-earth2guide.com/{ko|zh}/wiki/{slug}
-```
-
-### News 표 복구 4-Phase (세션 8 추가)
-
-```
-data/articles/*.json (영문 원본)
-  ↓ phase1_extract_tables  (오프라인, API 0)
-checkpoint/{slug}.tables.en.json
-  ↓ phase2_translate_cells (Gemini, 셀 단위 번역)
-checkpoint/{slug}.tables.{lang}.json
-  ↓ phase3_reassemble      (DB body 가져옴 + footer 분리 + N번째 H2 매칭)
-checkpoint/{slug}.{lang}.body.txt
-  ↓ phase4_patch_db        (Supabase PATCH)
-posts.body_{lang} (표 보존)
-```
+스케줄: **`earth2guide-weekly-autonews`** (매주 월 09:08 KST). 신규 0건이면 무커밋·무배포(라이브 보존).
 
 ---
 
 ## 인프라
 
-| 레이어 | 서비스 | 용도 |
+| 레이어 | 서비스 | 비고 |
 |---|---|---|
-| 도메인 | Cloudflare | earth2guide.com |
-| 호스팅 | Vercel | Next.js 빌드/배포 (web/ 하위에서) |
-| DB | Supabase | posts, wiki_pages, auth |
-| 파일 | Cloudflare R2 | bucket: e2korea (이미지) |
-| 번역 | Gemini 2.0 Flash | EN → KO/ZH |
-| GitHub | illuden/earth2guide-web | 단일 repo, web/ 폴더가 빌드 root |
+| 도메인 / DNS | Cloudflare | earth2guide.com (+ www) |
+| 호스팅 | **Cloudflare Pages (정적)** | GitHub 연결 · main push = 자동 배포 |
+| 빌드 | CF 클라우드 빌더 | root=`web`, `npm run build`, output `out`, node 22 |
+| 콘텐츠 | 레포 MD | **DB 없음** |
+| 이미지 | Cloudflare R2 | bucket `e2korea` · `pub-60a5d261178e40e98b04d0c1a4bbcaea.r2.dev` |
+| 검색 | 정적 `search-index.json` | 클라이언트 필터 (런타임 쿼리 없음) |
+| 번역 / 수집 | **Claude (Cowork scheduled)** | 주간 |
+| 소스 / 배포 | GitHub `illuden/earth2guide-web` | **배포 트리거 = main push** |
+| 분석 | GA4 `G-F0PYH6DYLW` + GSC + Naver | `app/layout.tsx` 하드코딩 (공개값) |
+
+**제거됨**: Vercel 호스팅 · Supabase DB/Auth · Gemini 번역 · ISR/SSR 런타임.
 
 ---
 
-## DB 스키마 (요약)
+## 빌드 / 배포 ★핵심
 
-```
-posts:
-  id, slug (unique), category, title_ko/zh, body_ko/zh, summary_ko/zh,
-  source_url, cover_image_url (R2),
-  status (draft|published|archived),
-  source (gemini|manual|bot),
-  translation_status (pending|done|failed),
-  published_at, created_at, updated_at
+- **방식: Cloudflare Pages ↔ GitHub 네이티브 연결.** `main` push → CF가 클라우드에서 빌드·배포. (구 wrangler 다이렉트 업로드 폐기)
+- **CF 빌드 설정**:
+  - production branch: `main`
+  - root directory: `web`
+  - build command: `npm run build`
+  - build output: `out`
+  - node: `web/.node-version` = `22`
+- **빌드 env** (전부 공개값 — 시크릿 아님):
+  - `NEXT_PUBLIC_SITE_URL` = https://earth2guide.com
+  - `NEXT_PUBLIC_REFERRAL_CODE` = 00000
+  - `NEXT_PUBLIC_R2_PUBLIC_URL` = https://pub-60a5d261178e40e98b04d0c1a4bbcaea.r2.dev
+  - `NEXT_PUBLIC_DEFAULT_LOCALE` = ko
+- **롤백**: CF 대시보드 → 이전 배포 Rollback, 또는 `git revert` + push.
+- 빌드 실패 시 자동배포 안 됨 → **라이브 보존**.
+- 비상 수동 배포(연결 장애 시): `npx wrangler pages deploy out --project-name=<proj> --branch=main` (CF 토큰 = 루트 `.env`).
 
-wiki_pages:
-  id, slug, category (account|essence|jewel|raid|general|beginner),
-  title_ko/zh, body_ko/zh, sort_order, status, ...
-```
-
-slug는 단일 컬럼 (영문, earth2.io 원본 URL과 100% 일치). KO/ZH가 같은 slug 공유.
-
-### Wiki 카테고리 (2026-04-26 세션 8: 5개 → 7개)
-
-```
-overview / account / land / sub-asset / ecosims / create / market
-```
-
-earth2.io/how-to URL 패턴 (`/how-to/{category}/{slug}`) 1:1 매핑.
-사이드바 표시 순서 = `WIKI_CATEGORY_META` 키 순서 (`web/lib/supabase/types.ts`).
-DB CHECK constraint 갱신: `web/supabase/migrations/002_wiki_category_v2.sql`.
+> ⚠️ git push = 빌드·배포 트리거. 문서만 바꿔 push해도 빌드 1회 돔(무해). 빈번하면 CF에서 빌드 경로 필터 설정.
 
 ---
 
-## 라우팅
+## 콘텐츠 포맷
 
-```
-/ → /ko (default redirect)
-/ko/news, /ko/news/[slug]            ← 소식
-/ko/official, /ko/official/[slug]    ← 공식 (announcement|update|promotion)
-/ko/wiki → /ko/wiki/overview         ← redirect (어스2 패턴)
-/ko/wiki/[slug]                      ← 위키 (사이드바 + 본문 단일 레이아웃)
-/ko/search                           ← 검색 (ilike)
-/zh/* (동일 구조)
-/admin/*                             ← Supabase Auth 보호
-```
-
-`generateStaticParams`로 빌드 시점에 published slug 목록 받아서 페이지 prerender.
+- 로케일별 MD: `content/posts/{ko,zh}/{slug}.md`, `content/wiki/{ko,zh}/{slug}.md`
+- **frontmatter**(JSON 스칼라: `id`=slug, title, category, summary, created_at …) + 본문 마크다운(`![](R2-url)` 이미지)
+- `manifest.json` = 전 posts+wiki 리스트/사이트맵 메타
+- `content.ts`: manifest=리스트, per-locale MD=상세 본문으로 로드. 공개 시그니처(getLatestPosts/getPostList/getPostBySlug/getWikiPages/searchPosts …) 유지.
 
 ---
 
-## 카테고리 매핑
+## 라우팅 (static export)
 
-| posts.category | URL | 비고 |
-|---|---|---|
-| news | /news/[slug] | |
-| announcement | /official/[slug] | 공지 |
-| official_news | /official/[slug] | 뉴스성 |
-| update | /official/[slug] | 버전 업데이트 |
-| promotion | /official/[slug] | 홍보 |
-| dev_qa | (Phase 3) | 개발자 QA |
-| community | /news/twitter or /news/discord (Phase 3) | sub_type 컬럼 필요 |
+```
+/  →  /ko
+/[locale]/news,  news 리스트            ← 현재 빈 목록 (전 글 official)
+/[locale]/official,  /[locale]/official/[slug]   ← 전 156 포스트
+/[locale]/wiki,      /[locale]/wiki/[slug]        ← 23 위키
+/[locale]/search                        ← 정적 검색
+/[locale]/about, /privacy, /terms
+  (locale = ko | zh)
+```
+
+- next-intl middleware **없음** → `setRequestLocale(locale)` + `generateStaticParams`로 ko/zh × slug 전부 빌드 시 prerender.
+- `/admin` 없음. `/news/[slug]` 라우트 삭제(전 글 official) — news/dev_qa 카테고리 생기면 복원.
 
 ---
 
-## Git / 배포
+## Next.js 16 + static export 주의 (실제 함정)
 
-- 단일 git: `earth2guide/.git`
-- GitHub: `illuden/earth2guide-web`
-- Vercel: GitHub repo의 `web/` 폴더를 root directory로 빌드
-- main 브랜치 push → 자동 배포
-
-```
-cd C:\Users\eldin\Desktop\earth2guide
-git status
-git add .
-git commit -m "fix: ..."
-git push origin main
-```
-
----
-
-## Next.js 16 주의사항 (실제 부딪힌 함정)
-
-> Next.js 16은 14/15와 동작이 다름. AI 에이전트가 옛 패턴 적용하면 빌드는 통과해도 런타임 500 가능.
-
-### 1. `generateStaticParams`는 모든 dynamic segment 명시 필수
-
-라우트가 `[locale]/news/[slug]`처럼 **dynamic segment 2개 이상**이면, `generateStaticParams`가 모두 반환해야 함. 하나라도 빠지면 페이지가 prerender 안 되고 런타임 매칭 실패 → 500.
-
-```ts
-// ❌ 틀림 (slug만 반환 — Next.js 14에선 통했지만 16에선 안 됨)
-export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
-  return slugs.map((slug) => ({ slug }))
-}
-
-// ✅ 맞음 (locale × slug 카르테시안)
-import { routing } from '@/i18n/routing'
-export async function generateStaticParams() {
-  const slugs = await getAllPostSlugs()
-  return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
-  )
-}
-```
-
-증상: `x-matched-path: /500`, 모든 detail URL 500, 목록 페이지는 정상.
-
-### 2. params는 Promise
-
-```ts
-// ✅ 맞음
-interface PageProps { params: Promise<{ locale: string; slug: string }> }
-const { locale, slug } = await params
-```
-
-### 3. revalidate / dynamicParams 명시 권장
-
-```ts
-export const revalidate = 3600       // ISR 1시간
-export const dynamicParams = true    // 기본값이지만 명시
-```
-
-### 4. react-markdown은 server component에서 OK
-
-`'use client'` 추가 필요 없음. 단, Tailwind v4에서 `prose` 클래스는 `@tailwindcss/typography` plugin 필요 — 우리는 plugin 없이 `components` prop으로 element별 직접 스타일링.
-PostBody.tsx + WikiContent.tsx 동일 패턴.
-
-### 5. dynamicParams = true 명시 권장
-
-빌드 시점에 slug 0건이거나 push 후 새 slug 추가될 때, ISR로 첫 방문 시 페이지 생성. 명시 안 하면 일부 환경에서 404 가능. wiki/[slug]/page.tsx에 명시함.
-
-### 6. HTML → 마크다운 추출 시 walk 함수 함정
-
-`<p><img/></p>` 구조에서 p 태그 처리 후 return하면 img 자식 walk 안 됨 → `[IMAGE:N]` placeholder 누락 → 번역 결과에 이미지 0개. p/li/blockquote 안 img는 별도 처리 필수 (step6에서 fix). step3/step4 옛 코드에도 같은 버그 있음 — 다음 세션에서 fix 필요.
-
-`<table>` / `<figure.wp-block-table>`도 walk에서 별도 처리. step3/step4에 누락돼 32개 글 표 100% 누락된 문제 발생 → 4-Phase 파이프라인으로 사후 복구함.
+1. **`generateStaticParams`는 모든 dynamic segment 반환** — `[locale]/.../[slug]`면 locale×slug 카르테시안 전부. 하나 빠지면 prerender 실패.
+2. **`params`는 Promise** — `const { locale, slug } = await params`.
+3. **`output:'export'` 제약** — ISR/`revalidate`/`force-dynamic` 불가. 런타임 `redirect()`→`notFound()`, `searchParams` 페이지네이션→**클라이언트 슬라이스**.
+4. **middleware 불가** (output:export) → WP 레거시 308은 `public/_redirects`로.
+5. **react-markdown은 server component OK**. `prose`는 plugin 없이 `components` prop으로 element별 직접 스타일.
+6. **이미지 `unoptimized`** (CF Pages엔 Image Optimization API 없음) → R2 원본 URL 그대로.
 
 ---
 
