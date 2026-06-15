@@ -34,6 +34,7 @@ export async function generateMetadata({
       siteName: 'Earth2Guide',
       locale: isKo ? 'ko_KR' : 'zh_CN',
       type: 'website',
+      images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Earth2Guide' }],
     },
   }
 }

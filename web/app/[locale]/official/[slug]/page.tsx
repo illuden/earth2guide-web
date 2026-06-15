@@ -32,11 +32,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.title,
     description: post.summary ?? undefined,
-    alternates: { canonical: `/${locale}/${getPostSegment(post.category)}/${slug}` },
+    alternates: {
+      canonical: `/${locale}/${getPostSegment(post.category)}/${slug}`,
+      languages: {
+        ko: `/ko/${getPostSegment(post.category)}/${slug}`,
+        zh: `/zh/${getPostSegment(post.category)}/${slug}`,
+      },
+    },
     openGraph: {
       title: post.title,
       description: post.summary ?? undefined,
-      images: post.cover_image_url ? [post.cover_image_url] : [],
+      url: `/${locale}/${getPostSegment(post.category)}/${slug}`,
+      images: post.cover_image_url
+        ? [post.cover_image_url]
+        : [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Earth2Guide' }],
     },
   }
 }

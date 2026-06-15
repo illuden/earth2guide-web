@@ -32,7 +32,14 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: excerpt || (locale === 'ko'
       ? `어스2 위키 — ${page.title} | Earth 2 공식 가이드 한국어 정리`
       : `Earth2Guide 百科 — ${page.title}`),
-    alternates: { canonical: `/${locale}/wiki/${slug}` },
+    alternates: {
+      canonical: `/${locale}/wiki/${slug}`,
+      languages: { ko: `/ko/wiki/${slug}`, zh: `/zh/wiki/${slug}` },
+    },
+    openGraph: {
+      url: `/${locale}/wiki/${slug}`,
+      images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Earth2Guide' }],
+    },
   }
 }
 
