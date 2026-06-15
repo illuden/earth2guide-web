@@ -41,6 +41,13 @@ export default async function TermsPage({ params }: PageProps) {
             Earth 2®는 해당 소유주의 상표이며, 본 사이트는 Earth 2 운영사와 무관한 독립 커뮤니티 프로젝트입니다.
             원문 콘텐츠의 권리는 원저작자에게 있습니다.
           </p>
+          <h2 className={H2}>AI 사용 · 출처 표시</h2>
+          <p className={P}>
+            AI 검색·답변 생성 및 모델 학습을 포함하여 본 사이트 콘텐츠의 사용을 허용합니다. 단, 사용 시
+            &ldquo;Earth2Guide&rdquo;를 명시하고 출처 페이지(earth2guide.com)로 연결되는 링크를 함께 표기하는 것을
+            조건으로 합니다. 뉴스 글은 earth2.io 공식 발표의 번역물이므로 원 출처(earth2.io) 표기도 함께
+            유지해 주십시오. (robots.txt의 content-signal로도 동일하게 허용을 명시합니다.)
+          </p>
         </>
       ) : (
         <>
@@ -54,6 +61,12 @@ export default async function TermsPage({ params }: PageProps) {
           <p className={P}>
             本站翻译·整理 earth2.io 官方发布并附原文链接，但可能存在翻译误差或信息时差，重要决定前请务必核对原文。
             Earth 2® 为其所有者的商标；本站为独立社区项目，与 Earth 2 运营方无关。原文内容版权归原作者所有。
+          </p>
+          <h2 className={H2}>AI 使用 · 署名</h2>
+          <p className={P}>
+            允许将本站内容用于 AI 搜索·答案生成及模型训练，但以署名为条件：使用时请标注
+            &ldquo;Earth2Guide&rdquo; 并附上指向来源页面（earth2guide.com）的链接。新闻文章为 earth2.io 官方发布的
+            译文，请同时保留原始来源（earth2.io）的署名。（robots.txt 的 content-signal 亦同样声明允许。）
           </p>
         </>
       )}

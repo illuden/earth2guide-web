@@ -1,0 +1,23 @@
+# Earth2Guide — robots.txt
+# ----------------------------------------------------------------------------
+# AI crawling: ALLOWED. Search indexing, AI search/grounding (ai-input), and
+# AI model training (ai-train) are all permitted.
+#
+# Content licensing / attribution (출처 표시 / 署名):
+#   You may use this site's content — including for AI search answers and model
+#   training — ON THE CONDITION that you give clear attribution to "Earth2Guide"
+#   with a visible link back to the source page (https://earth2guide.com).
+#   Full terms: https://earth2guide.com/ko/terms
+#   News articles are translations that cite their original source at earth2.io;
+#   please preserve that source attribution as well.
+#
+#   (Content signals below are voluntary directives; compliant crawlers honor
+#    them. This file expresses permission + attribution terms, not enforcement.)
+# ----------------------------------------------------------------------------
+
+User-agent: *
+Content-Signal: search=yes, ai-train=yes, ai-input=yes
+Allow: /
+
+Host: https://earth2guide.com
+Sitemap: https://earth2guide.com/sitemap.xml

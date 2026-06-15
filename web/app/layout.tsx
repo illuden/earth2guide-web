@@ -44,6 +44,8 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${manrope.variable} dark`}
     >
       <head>
+        {/* 콘텐츠 라이선스: AI 사용 허용 + 출처 표시(attribution) 조건 — 상세 terms */}
+        <link rel="license" href="https://earth2guide.com/ko/terms" />
         {/* Material Symbols */}
         <link
           rel="stylesheet"
