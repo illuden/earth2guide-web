@@ -6,6 +6,7 @@ import { WIKI_CATEGORY_META } from '@/lib/supabase/types'
 import { getLatestPosts } from '@/lib/content'
 import { PostList } from '@/components/news/PostList'
 import { Earth2ReferralBanner } from '@/components/referral/Earth2ReferralBanner'
+import EssenceHeroPrice from '@/components/essence/EssenceHeroPrice'
 
 export async function generateMetadata({
   params,
@@ -76,6 +77,11 @@ export default async function HomePage({
           <p className="text-lg text-[#a8e8ff]/70 font-body max-w-xl mx-auto leading-relaxed">
             {t('subtitle')}
           </p>
+
+          {/* ESS 실시간 시세 + 거래 CTA */}
+          <div className="pt-2 flex justify-center">
+            <EssenceHeroPrice locale={l} />
+          </div>
 
           {/* 검색창 */}
           <Link

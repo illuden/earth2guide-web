@@ -3,7 +3,17 @@
     "news": "资讯",
     "official": "Earth 2 官方",
     "wiki": "百科",
+    "ess": "Earth2 ESS",
     "search": "搜索"
+  },
+  "essence": {
+    "priceLabel": "Earth2 Essence(ESS) 实时价格",
+    "tradeCta": "交易 Essence",
+    "viewGuide": "查看 Essence 指南",
+    "bannerTitle": "Earth2 ESS · Essence",
+    "bannerDesc": "实时查看价格，集中获取 Essence($ESS) 交易与资讯",
+    "loading": "价格加载中…",
+    "error": "价格暂时不可用"
   },
   "home": {
     "title": "Earth2Guide",

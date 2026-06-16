@@ -12,9 +12,10 @@ export function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const navLinks = [
-    { href: `/${locale}/news`, label: t('news') },
-    { href: `/${locale}/official`, label: t('official') },
-    { href: `/${locale}/wiki`, label: t('wiki') },
+    { href: `/${locale}/wiki/essence`, label: t('ess'), accent: true },
+    { href: `/${locale}/news`, label: t('news'), accent: false },
+    { href: `/${locale}/official`, label: t('official'), accent: false },
+    { href: `/${locale}/wiki`, label: t('wiki'), accent: false },
   ]
 
   return (
@@ -32,11 +33,15 @@ export function Header() {
 
           {/* PC 네비게이션 */}
           <div className="hidden md:flex items-center gap-8 font-headline uppercase tracking-wider text-sm">
-            {navLinks.map(({ href, label }) => (
+            {navLinks.map(({ href, label, accent }) => (
               <Link
                 key={href}
                 href={href}
-                className="text-[#a8e8ff]/70 hover:text-[#a8e8ff] transition-all duration-300 hover:text-shadow-[0_0_8px_rgba(168,232,255,0.5)]"
+                className={
+                  accent
+                    ? 'text-[#00d4ff] hover:text-[#a8e8ff] transition-all duration-300 hover:text-shadow-[0_0_8px_rgba(0,212,255,0.6)]'
+                    : 'text-[#a8e8ff]/70 hover:text-[#a8e8ff] transition-all duration-300 hover:text-shadow-[0_0_8px_rgba(168,232,255,0.5)]'
+                }
               >
                 {label}
               </Link>

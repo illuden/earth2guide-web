@@ -27,6 +27,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
   if (!isOpen) return null
 
   const navLinks = [
+    { href: `/${locale}/wiki/essence`, label: t('ess') },
     { href: `/${locale}/news`, label: t('news') },
     { href: `/${locale}/official`, label: t('official') },
     { href: `/${locale}/wiki`, label: t('wiki') },

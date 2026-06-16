@@ -3,7 +3,17 @@
     "news": "소식",
     "official": "Earth 2 Official",
     "wiki": "위키",
+    "ess": "어스2 ESS",
     "search": "검색"
+  },
+  "essence": {
+    "priceLabel": "어스2 에센스(ESS) 실시간 시세",
+    "tradeCta": "에센스 거래하기",
+    "viewGuide": "에센스 가이드 보기",
+    "bannerTitle": "어스2 ESS · 에센스(Essence)",
+    "bannerDesc": "실시간 시세 확인하고, 에센스($ESS) 거래·정보를 한 곳에서",
+    "loading": "시세 불러오는 중…",
+    "error": "시세 일시 오류"
   },
   "home": {
     "title": "Earth2Guide",

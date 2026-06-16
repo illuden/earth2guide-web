@@ -1,11 +1,17 @@
 'use client'
 
+// 병합 배너: 어스2 ESS(에센스) 거래 동선 + 기존 7.5% 리퍼럴 코드 유지
+// 1차 CTA = '에센스 거래하기'(→ essence 설명 페이지, 거기서 Uniswap 링크)
+// 2차 CTA = '어스2 시작하기'(리퍼럴, app.earth2.io)
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { REFERRAL_CODE, EARTH2_APP_URL } from '@/lib/referral'
 
 export function Earth2ReferralBanner() {
   const t = useTranslations('referral')
+  const e = useTranslations('essence')
+  const locale = useLocale()
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
@@ -26,16 +32,18 @@ export function Earth2ReferralBanner() {
       <div className="relative flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="text-center md:text-left">
           <p className="text-xs font-label uppercase tracking-widest text-[#00d4ff]/70 mb-1">
-            {t('badge')}
+            {e('bannerTitle')}
           </p>
           <h3 className="text-xl lg:text-2xl font-headline font-bold text-[#dee1f7]">
-            {t('headline')}
+            {e('bannerDesc')}
           </h3>
-          <p className="text-[#a8e8ff]/70 text-sm mt-1 max-w-md">
-            {t('instruction')}
+
+          {/* 리퍼럴 혜택 안내 (유지) */}
+          <p className="text-[#a8e8ff]/70 text-sm mt-2 max-w-md">
+            {t('headline')} — {t('instruction')}
           </p>
 
-          {/* 리퍼럴 코드 (복사용) */}
+          {/* 리퍼럴 코드 (복사용, 유지) */}
           <div className="mt-3 flex items-center justify-center md:justify-start gap-2">
             <span className="text-[#a8e8ff]/60 text-xs font-label uppercase tracking-wider">
               {t('codeLabel')}
@@ -53,14 +61,23 @@ export function Earth2ReferralBanner() {
           </div>
         </div>
 
-        <a
-          href={EARTH2_APP_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex-shrink-0 px-8 py-3 bg-[#00d4ff] text-[#003642] font-headline font-bold uppercase tracking-wider text-sm hover:bg-[#a8e8ff] transition-colors rounded-sm"
-        >
-          {t('cta')}
-        </a>
+        {/* CTA: 1차=에센스 거래하기(내부), 2차=어스2 시작하기(리퍼럴) */}
+        <div className="flex flex-col gap-3 flex-shrink-0 w-full md:w-auto">
+          <Link
+            href={`/${locale}/wiki/essence`}
+            className="text-center px-8 py-3 bg-[#00d4ff] text-[#003642] font-headline font-bold uppercase tracking-wider text-sm hover:bg-[#a8e8ff] transition-colors rounded-sm"
+          >
+            {e('tradeCta')} →
+          </Link>
+          <a
+            href={EARTH2_APP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-center px-8 py-3 border border-[#00d4ff]/40 text-[#a8e8ff] font-headline font-bold uppercase tracking-wider text-sm hover:bg-[#00d4ff]/10 transition-colors rounded-sm"
+          >
+            {t('cta')}
+          </a>
+        </div>
       </div>
     </div>
   )
