@@ -9,6 +9,7 @@ import { routing } from '@/i18n/routing'
 import { WikiSidebar } from '@/components/wiki/WikiSidebar'
 import { WikiCategoryDropdown } from '@/components/wiki/WikiCategoryDropdown'
 import { WikiContent } from '@/components/wiki/WikiContent'
+import EssencePriceWidget from '@/components/essence/EssencePriceWidget'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -87,6 +88,13 @@ export default async function WikiDetailPage({ params }: PageProps) {
           <h1 className="text-2xl lg:text-4xl font-headline font-bold text-[#dee1f7] mb-8 pb-4 border-b border-[#3c494e]/30">
             {page.title}
           </h1>
+
+          {/* ESS 시세 위젯 — 가격 관련 페이지에만 노출 */}
+          {(slug === 'essence' || slug === 'earth2-status-2026') && (
+            <div className="mb-8">
+              <EssencePriceWidget locale={l} />
+            </div>
+          )}
 
           {/* 본문 */}
           {page.body ? (
