@@ -157,7 +157,7 @@ export default function EssencePriceWidget({
   const krwChg = price ? changeMeta(price.krwChange) : null
 
   return (
-    <div className="w-full max-w-[360px] bg-[#0f1424] border border-[#3c494e] rounded-2xl p-[18px] shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+    <div className="w-full max-w-[440px] bg-[#0f1424] border border-[#3c494e] rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2.5">
@@ -203,7 +203,7 @@ export default function EssencePriceWidget({
 
       {status === 'ready' && price && usdChg && krwChg && (
         <div>
-          <div className="text-[30px] font-extrabold text-[#dee1f7] tracking-tight leading-tight">
+          <div className="text-[36px] font-extrabold text-[#dee1f7] tracking-tight leading-tight">
             <span className="text-sm text-[#7b8794] font-semibold mr-1">$</span>
             {formatUsd(price.usd)}
           </div>

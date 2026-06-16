@@ -91,7 +91,7 @@ export default async function WikiDetailPage({ params }: PageProps) {
 
           {/* ESS 시세 위젯 — 가격 관련 페이지에만 노출 */}
           {(slug === 'essence' || slug === 'earth2-status-2026') && (
-            <div className="mb-8">
+            <div className="mb-8 flex justify-center">
               <EssencePriceWidget locale={l} />
             </div>
           )}
