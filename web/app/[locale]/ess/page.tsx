@@ -165,6 +165,7 @@ export default async function EssPage({ params }: PageProps) {
   const P = d.prices
   const months = d.withdrawals.monthly
   const weeksRecent = d.withdrawals.weekly.slice(-12)
+  const sm = d.withdrawals.summary
   const gen = d.generated_at.slice(0, 10)
   const pageUrl = `${BASE_URL}/${locale}/ess`
 
@@ -287,6 +288,16 @@ export default async function EssPage({ params }: PageProps) {
       {/* withdrawals */}
       <section className="mb-10">
         <h2 className={H2}>{t.s3}</h2>
+        <div className={CARD + ' mb-4 border-[#00d4ff]/40'}>
+          <div className="text-xs text-[#00d4ff] mb-3 font-semibold">{L === 'ko' ? `월간 요약 · 지난달 ${sm.last_month}` : `月度摘要 · 上月 ${sm.last_month}`}</div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <div><div className="text-[11px] text-[#859398]">{L === 'ko' ? '유저 출금' : '用户提现'}</div><div className="text-lg font-bold text-[#16ff9e] tabular-nums">{nf(sm.last.withdrawn_ess)}</div><div className="text-[11px] text-[#859398]">≈{usd(sm.last.withdrawn_usd)}{sm.mom_withdrawn_pct != null ? ` · ${L === 'ko' ? '전월비' : '环比'} ${sm.mom_withdrawn_pct > 0 ? '+' : ''}${sm.mom_withdrawn_pct}%` : ''}</div></div>
+            <div><div className="text-[11px] text-[#859398]">{L === 'ko' ? 'DEX 매도 추정' : 'DEX 卖出估计'}</div><div className="text-lg font-bold text-[#f0883e] tabular-nums">{nf(sm.last.sold_ess)}</div><div className="text-[11px] text-[#859398]">≈{usd(sm.last.sold_usd)}</div></div>
+            <div><div className="text-[11px] text-[#859398]">{L === 'ko' ? '유저 보유율(누적)' : '用户保留率(累计)'}</div><div className="text-lg font-bold text-[#dee1f7] tabular-nums">{sm.cumulative.held_pct}%</div><div className="text-[11px] text-[#859398]">{nf(sm.cumulative.held_by_users_ess)} ESS</div></div>
+            <div><div className="text-[11px] text-[#859398]">{L === 'ko' ? '이탈(매도·이전)' : '流出(卖出·转移)'}</div><div className="text-lg font-bold text-[#dee1f7] tabular-nums">{sm.cumulative.left_pct}%</div><div className="text-[11px] text-[#859398]">{nf(sm.cumulative.left_wallets_ess)} ESS</div></div>
+          </div>
+          <div className="text-[11px] text-[#859398] mt-3 leading-relaxed">{L === 'ko' ? `출금 누적 ${nf(sm.cumulative.withdrawn_ess)} ESS 중 현재 유저 보유 ${nf(sm.cumulative.held_by_users_ess)}(${sm.cumulative.held_pct}%). 출금 수령 지갑의 DEX 매도 추정 누적 ~${nf(sm.cumulative.dex_sold_gross_ess)} ESS(당시가 ${usd(sm.cumulative.dex_sold_gross_usd_attime)}, 매수분 재매도·CEX 제외 추정).` : `累计提现 ${nf(sm.cumulative.withdrawn_ess)} ESS 中当前用户保留 ${nf(sm.cumulative.held_by_users_ess)}(${sm.cumulative.held_pct}%)。提现钱包 DEX 卖出估计累计 ~${nf(sm.cumulative.dex_sold_gross_ess)} ESS(按当时价 ${usd(sm.cumulative.dex_sold_gross_usd_attime)}，不含再买卖·CEX）。`}</div>
+        </div>
         <div className={CARD + ' text-[#bbc9cf] leading-relaxed text-sm mb-4'}>
           {t.s3b(d.withdrawals.total_ess, d.withdrawals.tx_count, d.withdrawals.usd_at_time, d.withdrawals.usd_now)}
         </div>

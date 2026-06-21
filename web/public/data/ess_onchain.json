@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-06-21T01:45:00+00:00",
+ "generated_at": "2026-06-21T02:57:34+00:00",
  "as_of_block": 25359566,
  "as_of_date": "2026-06-20",
  "contract": "0x2c0687215aca7f5e2792d956e170325e92a02aca",
  "prices": {
-  "ess_usd": 0.01170383,
+  "ess_usd": 0.01170344,
   "ess_krw": 17.88,
-  "eth_usd": 1734.7
+  "eth_usd": 1734.92
  },
  "supply": {
   "total": 437342414,
@@ -47,139 +47,218 @@
   "total_ess": 131347734,
   "tx_count": 11164,
   "usd_at_time": 8088243,
-  "usd_now": 1537272,
+  "usd_now": 1537220,
   "internal_moves": 129970049,
   "to_contracts": 48588585,
+  "summary": {
+   "last_month": "2026-05",
+   "prev_month": "2026-04",
+   "last": {
+    "withdrawn_ess": 3642780,
+    "withdrawn_usd": 46841,
+    "sold_ess": 5149734,
+    "sold_usd": 65835
+   },
+   "prev": {
+    "withdrawn_ess": 3655146,
+    "withdrawn_usd": 58506,
+    "sold_ess": 5462702,
+    "sold_usd": 85491
+   },
+   "mom_withdrawn_pct": -0.3,
+   "cumulative": {
+    "withdrawn_ess": 131347734,
+    "held_by_users_ess": 37202457,
+    "held_usd_now": 435397,
+    "held_pct": 28.3,
+    "left_wallets_ess": 94145277,
+    "left_pct": 71.7,
+    "dex_sold_gross_ess": 169480970,
+    "dex_sold_gross_usd_attime": 9070824
+   }
+  },
   "monthly": [
    {
     "m": "2024-05",
     "ess": 199,
-    "usd": 23
+    "usd": 23,
+    "sold_ess": 0,
+    "sold_usd": 0
    },
    {
     "m": "2024-06",
     "ess": 38590079,
-    "usd": 4325184
+    "usd": 4325184,
+    "sold_ess": 27568333,
+    "sold_usd": 2989841
    },
    {
     "m": "2024-07",
     "ess": 4794038,
-    "usd": 386125
+    "usd": 386125,
+    "sold_ess": 12157364,
+    "sold_usd": 979905
    },
    {
     "m": "2024-08",
     "ess": 6220146,
-    "usd": 407616
+    "usd": 407616,
+    "sold_ess": 10421398,
+    "sold_usd": 691059
    },
    {
     "m": "2024-09",
     "ess": 2556501,
-    "usd": 139725
+    "usd": 139725,
+    "sold_ess": 3951926,
+    "sold_usd": 212030
    },
    {
     "m": "2024-10",
     "ess": 3067880,
-    "usd": 155822
+    "usd": 155822,
+    "sold_ess": 8447804,
+    "sold_usd": 425848
    },
    {
     "m": "2024-11",
     "ess": 5632914,
-    "usd": 270082
+    "usd": 270082,
+    "sold_ess": 9879254,
+    "sold_usd": 476049
    },
    {
     "m": "2024-12",
     "ess": 4917290,
-    "usd": 333631
+    "usd": 333631,
+    "sold_ess": 7482188,
+    "sold_usd": 519020
    },
    {
     "m": "2025-01",
     "ess": 4015491,
-    "usd": 250194
+    "usd": 250194,
+    "sold_ess": 5438935,
+    "sold_usd": 338402
    },
    {
     "m": "2025-02",
     "ess": 7061610,
-    "usd": 404245
+    "usd": 404245,
+    "sold_ess": 6392620,
+    "sold_usd": 364443
    },
    {
     "m": "2025-03",
     "ess": 4167336,
-    "usd": 173710
+    "usd": 173710,
+    "sold_ess": 6186717,
+    "sold_usd": 259417
    },
    {
     "m": "2025-04",
     "ess": 4866946,
-    "usd": 157552
+    "usd": 157552,
+    "sold_ess": 9976849,
+    "sold_usd": 318273
    },
    {
     "m": "2025-05",
     "ess": 2977259,
-    "usd": 102666
+    "usd": 102666,
+    "sold_ess": 6588677,
+    "sold_usd": 226199
    },
    {
     "m": "2025-06",
     "ess": 2949919,
-    "usd": 84296
+    "usd": 84296,
+    "sold_ess": 4390454,
+    "sold_usd": 124726
    },
    {
     "m": "2025-07",
     "ess": 3416498,
-    "usd": 142825
+    "usd": 142825,
+    "sold_ess": 4751984,
+    "sold_usd": 193826
    },
    {
     "m": "2025-08",
     "ess": 3419604,
-    "usd": 97278
+    "usd": 97278,
+    "sold_ess": 6364891,
+    "sold_usd": 181636
    },
    {
     "m": "2025-09",
     "ess": 4030766,
-    "usd": 112381
+    "usd": 112381,
+    "sold_ess": 4212409,
+    "sold_usd": 117326
    },
    {
     "m": "2025-10",
     "ess": 5059531,
-    "usd": 127873
+    "usd": 127873,
+    "sold_ess": 4918890,
+    "sold_usd": 123898
    },
    {
     "m": "2025-11",
     "ess": 2124799,
-    "usd": 44737
+    "usd": 44737,
+    "sold_ess": 2986990,
+    "sold_usd": 63488
    },
    {
     "m": "2025-12",
     "ess": 2846293,
-    "usd": 62289
+    "usd": 62289,
+    "sold_ess": 3325839,
+    "sold_usd": 72726
    },
    {
     "m": "2026-01",
     "ess": 2294322,
-    "usd": 52712
+    "usd": 52712,
+    "sold_ess": 2652205,
+    "sold_usd": 59812
    },
    {
     "m": "2026-02",
     "ess": 3184993,
-    "usd": 65243
+    "usd": 65243,
+    "sold_ess": 4492286,
+    "sold_usd": 92367
    },
    {
     "m": "2026-03",
     "ess": 3092422,
-    "usd": 55502
+    "usd": 55502,
+    "sold_ess": 2816989,
+    "sold_usd": 50003
    },
    {
     "m": "2026-04",
     "ess": 3655146,
-    "usd": 58506
+    "usd": 58506,
+    "sold_ess": 5462702,
+    "sold_usd": 85491
    },
    {
     "m": "2026-05",
     "ess": 3642780,
-    "usd": 46841
+    "usd": 46841,
+    "sold_ess": 5149734,
+    "sold_usd": 65835
    },
    {
     "m": "2026-06",
     "ess": 2762973,
-    "usd": 31185
+    "usd": 31185,
+    "sold_ess": 3463533,
+    "sold_usd": 39205
    }
   ],
   "weekly": [
@@ -730,7 +809,7 @@
   "v3_weth": 2.2223,
   "v3_tvl_usd": 10118,
   "v4_ess": 8772798,
-  "v4_ess_usd": 102675,
+  "v4_ess_usd": 102672,
   "total_dex_ess": 9307929
  },
  "whales": {
@@ -741,7 +820,7 @@
    {
     "addr": "0x8dd13bc28a1b8a9e990675c1c191481704b2e413",
     "bal": 6400001,
-    "bal_usd": 74905,
+    "bal_usd": 74902,
     "senders": 6,
     "from_e": 0
    },
@@ -755,28 +834,28 @@
    {
     "addr": "0x97aecc7175994126c7db5ce5b1ff6938595d1389",
     "bal": 1720202,
-    "bal_usd": 20133,
+    "bal_usd": 20132,
     "senders": 1,
     "from_e": 0
    },
    {
     "addr": "0x09511168a732f708ed13cab80b40d0d94ed8c054",
     "bal": 1422700,
-    "bal_usd": 16651,
+    "bal_usd": 16650,
     "senders": 6,
     "from_e": 0
    },
    {
     "addr": "0x72b188a83c524cb5f0730d62c0cf5c8a25392d01",
     "bal": 1417476,
-    "bal_usd": 16590,
+    "bal_usd": 16589,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0xd2bd1b84f43335a10607e96d70f615d83ad1ce52",
     "bal": 1411909,
-    "bal_usd": 16525,
+    "bal_usd": 16524,
     "senders": 3,
     "from_e": 0
    },
@@ -790,21 +869,21 @@
    {
     "addr": "0xabe32f3595eb148a2b4bf7d124ffff7c4cc7ec97",
     "bal": 1366202,
-    "bal_usd": 15990,
+    "bal_usd": 15989,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0x3e772e8ea51de19947d99f58d0e60463d8e27afa",
     "bal": 1365880,
-    "bal_usd": 15986,
+    "bal_usd": 15985,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0x8961658725f35429d1413a2465231e0a08e67c76",
     "bal": 1259121,
-    "bal_usd": 14737,
+    "bal_usd": 14736,
     "senders": 3,
     "from_e": 0
    },
@@ -818,14 +897,14 @@
    {
     "addr": "0x66609a10a5f82385c4af9236e3dcce7ac2ffc266",
     "bal": 1100742,
-    "bal_usd": 12883,
+    "bal_usd": 12882,
     "senders": 6,
     "from_e": 244717
    },
    {
     "addr": "0x80451979667a8c7ee6b9a4eb3857be6ee6e13033",
     "bal": 1055115,
-    "bal_usd": 12349,
+    "bal_usd": 12348,
     "senders": 1,
     "from_e": 0
    }
@@ -850,7 +929,7 @@
    {
     "addr": "0x09511168a732f708ed13cab80b40d0d94ed8c054",
     "bal": 1422700,
-    "bal_usd": 16651,
+    "bal_usd": 16650,
     "bought": 1670613,
     "retention": 85,
     "buy_weeks": 53,
@@ -862,7 +941,7 @@
    {
     "addr": "0x8961658725f35429d1413a2465231e0a08e67c76",
     "bal": 1259121,
-    "bal_usd": 14737,
+    "bal_usd": 14736,
     "bought": 1127363,
     "retention": 100,
     "buy_weeks": 46,
@@ -886,7 +965,7 @@
    {
     "addr": "0x8dd13bc28a1b8a9e990675c1c191481704b2e413",
     "bal": 6400001,
-    "bal_usd": 74905,
+    "bal_usd": 74902,
     "bought": 6400000,
     "retention": 100,
     "buy_weeks": 26,
