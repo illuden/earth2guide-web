@@ -156,6 +156,35 @@ function MonthlyChart({ months, accent }: { months: { m: string; ess: number }[]
   )
 }
 
+function LegendRow({ color, label, v, total }: { color: string; label: string; v: number; total: number }) {
+  return (
+    <div className="flex items-center justify-between gap-2">
+      <span className="flex items-center gap-2"><span className="inline-block w-3 h-3 rounded-sm" style={{ backgroundColor: color }} />{label}</span>
+      <span className="tabular-nums text-[#dee1f7]">{nf(v)} <span className="text-[#859398]">({((v / total) * 100).toFixed(1)}%)</span></span>
+    </div>
+  )
+}
+
+function SupplyDonut({ segs }: { segs: { value: number; color: string }[] }) {
+  const total = segs.reduce((s, x) => s + x.value, 0) || 1
+  const r = 70, C = 2 * Math.PI * r
+  let off = 0
+  return (
+    <svg viewBox="0 0 180 180" className="w-40 h-40 shrink-0" role="img" aria-label="supply composition">
+      <g transform="rotate(-90 90 90)">
+        {segs.map((s, i) => {
+          const dash = (s.value / total) * C
+          const node = (
+            <circle key={i} cx="90" cy="90" r={r} fill="none" stroke={s.color} strokeWidth="26" strokeDasharray={`${dash} ${C - dash}`} strokeDashoffset={-off} />
+          )
+          off += dash
+          return node
+        })}
+      </g>
+    </svg>
+  )
+}
+
 export default async function EssPage({ params }: PageProps) {
   const { locale } = await params
   setRequestLocale(locale)
@@ -251,6 +280,23 @@ export default async function EssPage({ params }: PageProps) {
       {/* supply / burn */}
       <section className="mb-10">
         <h2 className={H2}>{t.s1}</h2>
+        <div className={CARD + ' mb-4 flex flex-col sm:flex-row items-center gap-6'}>
+          <SupplyDonut segs={[
+            { value: d.circulating.amount, color: '#16ff9e' },
+            { value: d.earth2.total, color: '#00d4ff' },
+            { value: d.supply.burned, color: '#6b7280' },
+            { value: d.supply.max_planned - d.supply.minted, color: '#2f3445' },
+          ]} />
+          <div className="flex-1 w-full">
+            <div className="text-xs text-[#859398] mb-2">{L === 'ko' ? `계획 총 발행량 ${nf(d.supply.max_planned)} ESS 기준 · 현재 ${d.supply.minted_pct}% 발행` : `按计划最大发行量 ${nf(d.supply.max_planned)} ESS · 已发行 ${d.supply.minted_pct}%`}</div>
+            <div className="space-y-1.5 text-sm">
+              <LegendRow color="#16ff9e" label={L === 'ko' ? '유통 (비-earth2)' : '流通 (非 earth2)'} v={d.circulating.amount} total={d.supply.max_planned} />
+              <LegendRow color="#00d4ff" label={L === 'ko' ? 'earth2 보유 (추정)' : 'earth2 持有 (推测)'} v={d.earth2.total} total={d.supply.max_planned} />
+              <LegendRow color="#6b7280" label={L === 'ko' ? '소각' : '销毁'} v={d.supply.burned} total={d.supply.max_planned} />
+              <LegendRow color="#2f3445" label={L === 'ko' ? '미발행 (계획 잔여)' : '未发行 (计划剩余)'} v={d.supply.max_planned - d.supply.minted} total={d.supply.max_planned} />
+            </div>
+          </div>
+        </div>
         <div className={CARD + ' text-[#bbc9cf] leading-relaxed text-sm'}>
           {t.s1b(d.supply.minted, d.supply.burned, d.supply.burn_pct, d.supply.total)}
         </div>
