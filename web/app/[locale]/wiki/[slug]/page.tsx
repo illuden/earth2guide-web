@@ -10,6 +10,7 @@ import { WikiSidebar } from '@/components/wiki/WikiSidebar'
 import { WikiCategoryDropdown } from '@/components/wiki/WikiCategoryDropdown'
 import { WikiContent } from '@/components/wiki/WikiContent'
 import EssencePriceWidget from '@/components/essence/EssencePriceWidget'
+import TokenomicsVisual from '@/components/wiki/TokenomicsVisual'
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>
@@ -17,10 +18,16 @@ interface PageProps {
 
 export async function generateStaticParams() {
   const slugs = await getAllWikiSlugs()
-  // [locale] × [slug] 카르테시안 — Next.js 16은 모든 dynamic segment 명시 요구
-  return routing.locales.flatMap((locale) =>
-    slugs.map((slug) => ({ locale, slug }))
-  )
+  // [locale] × [slug] 카르테시안 — 단, 해당 로케일에 실제 문서가 있는 조합만 생성.
+  // (KO 전용 페이지의 빈 ZH 라우트 생성 방지 — output:export에서 notFound 라우트 미생성)
+  const params: { locale: string; slug: string }[] = []
+  for (const locale of routing.locales) {
+    for (const slug of slugs) {
+      const doc = await getWikiBySlug(slug, locale as Locale)
+      if (doc) params.push({ locale, slug })
+    }
+  }
+  return params
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -90,11 +97,14 @@ export default async function WikiDetailPage({ params }: PageProps) {
           </h1>
 
           {/* ESS 시세 위젯 — 가격 관련 페이지에만 노출 */}
-          {(slug === 'essence' || slug === 'earth2-status-2026') && (
+          {(slug === 'essence' || slug === 'earth2-status-2026' || slug === 'earth2-tokenomics') && (
             <div className="mb-8 flex justify-center">
               <EssencePriceWidget locale={l} />
             </div>
           )}
+
+          {/* 토크노믹스 플래그십 전용 시각화 (가치순환·핵심숫자·Source/Sink) */}
+          {slug === 'earth2-tokenomics' && <TokenomicsVisual locale={l} />}
 
           {/* 본문 */}
           {page.body ? (

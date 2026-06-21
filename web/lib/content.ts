@@ -219,7 +219,13 @@ export async function getWikiPages(
 ): Promise<WikiPageLocalized[]> {
   const m = await loadManifest()
   return m.wiki
-    .filter((w) => w.status === 'published' && (!category || w.category === category))
+    .filter(
+      (w) =>
+        w.status === 'published' &&
+        (!category || w.category === category) &&
+        // 비-KO 로케일에서는 해당 로케일 제목이 있는 항목만 노출 (KO 전용 페이지의 ZH 사이드바 404 링크 방지)
+        (locale === 'ko' || w.title_zh != null)
+    )
     .sort((a, b) => a.sort_order - b.sort_order)
     .map((w) => ({
       id: w.id,
