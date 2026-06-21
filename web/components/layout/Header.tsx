@@ -12,10 +12,8 @@ export function Header() {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const navLinks = [
-    { href: `/${locale}/wiki/essence`, label: t('ess'), accent: true },
-    { href: `/${locale}/ess`, label: t('onchain'), accent: false },
-    { href: `/${locale}/news`, label: t('news'), accent: false },
-    { href: `/${locale}/official`, label: t('official'), accent: false },
+    { href: `/${locale}/ess`, label: t('onchain'), accent: true },
+    { href: `/${locale}/official`, label: t('news'), accent: false },
     { href: `/${locale}/wiki`, label: t('wiki'), accent: false },
   ]
 
