@@ -13,6 +13,7 @@ Every news article links its original source at earth2.io. Wiki pages are locali
 - Chinese news: https://earth2guide.com/zh/official
 - Chinese wiki: https://earth2guide.com/zh/wiki/overview
 - Search: https://earth2guide.com/ko/search
+- ESS on-chain dashboard (Earth 2 Essence token data: total supply, burned amount, earth2 wallet holdings, withdrawals to personal wallets with weekly USD valuation, ESS/ETH pool liquidity, whales holding 1M+ ESS, steady-accumulator wallets; reconstructed from Ethereum Transfer events, updated weekly): https://earth2guide.com/ko/ess (Chinese: https://earth2guide.com/zh/ess)
 - Sitemap: https://earth2guide.com/sitemap.xml
 
 ## Terminology

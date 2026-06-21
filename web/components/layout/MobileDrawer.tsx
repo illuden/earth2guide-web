@@ -28,6 +28,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
   const navLinks = [
     { href: `/${locale}/wiki/essence`, label: t('ess') },
+    { href: `/${locale}/ess`, label: t('onchain') },
     { href: `/${locale}/news`, label: t('news') },
     { href: `/${locale}/official`, label: t('official') },
     { href: `/${locale}/wiki`, label: t('wiki') },
