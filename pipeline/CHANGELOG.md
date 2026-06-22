@@ -561,3 +561,6 @@ DISCORD_CHANNEL_ANNOUNCEMENTS, DISCORD_CHANNEL_DEV_QA, DISCORD_SHANE_USER_ID
 - deploy: CF Pages `earth2guide` direct-upload(wrangler) → earth2guide.com 도메인 전환(apex+www CNAME, 인증서 active)
 - feat: 주간 자동화 Scheduled task `earth2guide-weekly-autonews` + 헬퍼 cf_detect_new/cf_mirror_image/cf_publish
 - chore: Supabase·Vercel 프로젝트 삭제(Alvin), 잔여 Vercel DNS(와일드카드·_domainconnect) 정리
+
+## 2026-06-15 (auto-news) — 0 new
+## 2026-06-22 (auto) — 0 new posts, ESS refreshed: supply 437,342,414 / burned 66,900,193 / earth2 78.7% / whales 13 / acc 97 | May 2026 withdrawn 3,642,780 ($46,841)

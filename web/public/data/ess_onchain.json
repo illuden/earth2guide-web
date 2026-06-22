@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-06-21T03:17:17+00:00",
- "as_of_block": 25359566,
- "as_of_date": "2026-06-20",
+ "generated_at": "2026-06-22T00:09:09+00:00",
+ "as_of_block": 25369350,
+ "as_of_date": "2026-06-21",
  "contract": "0x2c0687215aca7f5e2792d956e170325e92a02aca",
  "prices": {
-  "ess_usd": 0.01169743,
-  "ess_krw": 17.87,
-  "eth_usd": 1734.58
+  "ess_usd": 0.01156951,
+  "ess_krw": 17.71,
+  "eth_usd": 1710.91
  },
  "supply": {
   "total": 437342414,
@@ -17,14 +17,14 @@
   "minted_pct": 50.4
  },
  "earth2": {
-  "total": 344231628,
+  "total": 344236742,
   "pct": 78.7,
   "wallets": [
    {
     "role_ko": "메인 분배(확정)",
     "role_zh": "主分发(确定)",
     "addr": "0x68d332ec97800aa1a112160195cc281978ec8eea",
-    "bal": 248346844
+    "bal": 248351958
    },
    {
     "role_ko": "트레저리(추정)",
@@ -41,7 +41,7 @@
   ]
  },
  "circulating": {
-  "amount": 93110786,
+  "amount": 93105672,
   "pct": 21.3
  },
  "holders_total": 2866,
@@ -49,7 +49,7 @@
   "total_ess": 131347734,
   "tx_count": 11164,
   "usd_at_time": 8088243,
-  "usd_now": 1536431,
+  "usd_now": 1519629,
   "internal_moves": 129970049,
   "to_contracts": 48588585,
   "summary": {
@@ -70,13 +70,13 @@
    "mom_withdrawn_pct": -0.3,
    "cumulative": {
     "withdrawn_ess": 131347734,
-    "held_by_users_ess": 37202457,
-    "held_usd_now": 435173,
+    "held_by_users_ess": 37201125,
+    "held_usd_now": 430399,
     "held_pct": 28.3,
-    "left_wallets_ess": 94145277,
+    "left_wallets_ess": 94146610,
     "left_pct": 71.7,
-    "dex_sold_gross_ess": 169480970,
-    "dex_sold_gross_usd_attime": 9070824
+    "dex_sold_gross_ess": 169483513,
+    "dex_sold_gross_usd_attime": 9070854
    }
   },
   "monthly": [
@@ -259,8 +259,8 @@
     "m": "2026-06",
     "ess": 2762973,
     "usd": 31185,
-    "sold_ess": 3463533,
-    "sold_usd": 39205
+    "sold_ess": 3466076,
+    "sold_usd": 39234
    }
   ],
   "weekly": [
@@ -807,12 +807,12 @@
   ]
  },
  "pools": {
-  "v3_ess": 535131,
-  "v3_weth": 2.2223,
-  "v3_tvl_usd": 10114,
-  "v4_ess": 8772798,
-  "v4_ess_usd": 102619,
-  "total_dex_ess": 9307929
+  "v3_ess": 533920,
+  "v3_weth": 2.2306,
+  "v3_tvl_usd": 9994,
+  "v4_ess": 8775227,
+  "v4_ess_usd": 101525,
+  "total_dex_ess": 9309147
  },
  "whales": {
   "threshold": 1000000,
@@ -822,91 +822,91 @@
    {
     "addr": "0x8dd13bc28a1b8a9e990675c1c191481704b2e413",
     "bal": 6400001,
-    "bal_usd": 74864,
+    "bal_usd": 74045,
     "senders": 6,
     "from_e": 0
    },
    {
     "addr": "0x2ad63776f556156f2f43992368782aff9185e75e",
     "bal": 2102000,
-    "bal_usd": 24588,
+    "bal_usd": 24319,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0x97aecc7175994126c7db5ce5b1ff6938595d1389",
     "bal": 1720202,
-    "bal_usd": 20122,
+    "bal_usd": 19902,
     "senders": 1,
     "from_e": 0
    },
    {
     "addr": "0x09511168a732f708ed13cab80b40d0d94ed8c054",
     "bal": 1422700,
-    "bal_usd": 16642,
+    "bal_usd": 16460,
     "senders": 6,
     "from_e": 0
    },
    {
     "addr": "0x72b188a83c524cb5f0730d62c0cf5c8a25392d01",
     "bal": 1417476,
-    "bal_usd": 16581,
+    "bal_usd": 16400,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0xd2bd1b84f43335a10607e96d70f615d83ad1ce52",
     "bal": 1411909,
-    "bal_usd": 16516,
+    "bal_usd": 16335,
     "senders": 3,
     "from_e": 0
    },
    {
     "addr": "0x3c37283586db7c95bf4b88539120a143710df073",
     "bal": 1376913,
-    "bal_usd": 16106,
+    "bal_usd": 15930,
     "senders": 1,
     "from_e": 0
    },
    {
     "addr": "0xabe32f3595eb148a2b4bf7d124ffff7c4cc7ec97",
     "bal": 1366202,
-    "bal_usd": 15981,
+    "bal_usd": 15806,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0x3e772e8ea51de19947d99f58d0e60463d8e27afa",
     "bal": 1365880,
-    "bal_usd": 15977,
+    "bal_usd": 15803,
     "senders": 2,
     "from_e": 0
    },
    {
     "addr": "0x8961658725f35429d1413a2465231e0a08e67c76",
     "bal": 1259121,
-    "bal_usd": 14728,
+    "bal_usd": 14567,
     "senders": 3,
     "from_e": 0
    },
    {
     "addr": "0xfe98ebfdf4ac00c65c3ab0f7ee885a011b509ab6",
     "bal": 1159576,
-    "bal_usd": 13564,
+    "bal_usd": 13416,
     "senders": 4,
     "from_e": 0
    },
    {
     "addr": "0x66609a10a5f82385c4af9236e3dcce7ac2ffc266",
     "bal": 1100742,
-    "bal_usd": 12876,
+    "bal_usd": 12735,
     "senders": 6,
     "from_e": 244717
    },
    {
     "addr": "0x80451979667a8c7ee6b9a4eb3857be6ee6e13033",
     "bal": 1055115,
-    "bal_usd": 12342,
+    "bal_usd": 12207,
     "senders": 1,
     "from_e": 0
    }
@@ -919,7 +919,7 @@
    {
     "addr": "0xfecd03710b65f189292d2b1d780da56261fe8583",
     "bal": 337295,
-    "bal_usd": 3945,
+    "bal_usd": 3902,
     "bought": 337195,
     "retention": 100,
     "buy_weeks": 82,
@@ -931,7 +931,7 @@
    {
     "addr": "0x09511168a732f708ed13cab80b40d0d94ed8c054",
     "bal": 1422700,
-    "bal_usd": 16642,
+    "bal_usd": 16460,
     "bought": 1670613,
     "retention": 85,
     "buy_weeks": 53,
@@ -943,7 +943,7 @@
    {
     "addr": "0x8961658725f35429d1413a2465231e0a08e67c76",
     "bal": 1259121,
-    "bal_usd": 14728,
+    "bal_usd": 14567,
     "bought": 1127363,
     "retention": 100,
     "buy_weeks": 46,
@@ -955,7 +955,7 @@
    {
     "addr": "0x32e2274918366fde947828e9480256a72f727896",
     "bal": 69229,
-    "bal_usd": 810,
+    "bal_usd": 801,
     "bought": 68229,
     "retention": 100,
     "buy_weeks": 29,
@@ -967,7 +967,7 @@
    {
     "addr": "0x8dd13bc28a1b8a9e990675c1c191481704b2e413",
     "bal": 6400001,
-    "bal_usd": 74864,
+    "bal_usd": 74045,
     "bought": 6400000,
     "retention": 100,
     "buy_weeks": 26,
@@ -979,7 +979,7 @@
    {
     "addr": "0xb862d0908e000e462549feabacf5e9837fa76e47",
     "bal": 850406,
-    "bal_usd": 9948,
+    "bal_usd": 9839,
     "bought": 999818,
     "retention": 85,
     "buy_weeks": 26,
@@ -991,7 +991,7 @@
    {
     "addr": "0xc54dbe003693c6cd015d65f09cd2f0a975245c64",
     "bal": 218534,
-    "bal_usd": 2556,
+    "bal_usd": 2528,
     "bought": 218534,
     "retention": 100,
     "buy_weeks": 26,
@@ -1003,7 +1003,7 @@
    {
     "addr": "0x99b94400f978a47867c009d34d2840a1ad9f6065",
     "bal": 54222,
-    "bal_usd": 634,
+    "bal_usd": 627,
     "bought": 58145,
     "retention": 93,
     "buy_weeks": 25,
@@ -1027,7 +1027,7 @@
    {
     "addr": "0xcb0530dcf5385481b2a4512df0e0e930e9fd35be",
     "bal": 425000,
-    "bal_usd": 4971,
+    "bal_usd": 4917,
     "bought": 500442,
     "retention": 85,
     "buy_weeks": 24,
@@ -1039,7 +1039,7 @@
    {
     "addr": "0x729dc336134d25fabafebfc2c1c3005ad02e1f63",
     "bal": 627524,
-    "bal_usd": 7340,
+    "bal_usd": 7260,
     "bought": 427524,
     "retention": 100,
     "buy_weeks": 23,
@@ -1051,7 +1051,7 @@
    {
     "addr": "0xa692f60c774892c002d53a4ef72f8602b079abd3",
     "bal": 318056,
-    "bal_usd": 3720,
+    "bal_usd": 3680,
     "bought": 486490,
     "retention": 65,
     "buy_weeks": 23,
@@ -1075,7 +1075,7 @@
    {
     "addr": "0xa9586b68c41357c1bb5dd7d3dd961fb2ef65ebf6",
     "bal": 648603,
-    "bal_usd": 7587,
+    "bal_usd": 7504,
     "bought": 766603,
     "retention": 85,
     "buy_weeks": 20,
@@ -1087,7 +1087,7 @@
    {
     "addr": "0x8887dd81fa4f3cea74453f4b5dadb76c3547566c",
     "bal": 105901,
-    "bal_usd": 1239,
+    "bal_usd": 1225,
     "bought": 119901,
     "retention": 88,
     "buy_weeks": 19,
@@ -1099,7 +1099,7 @@
    {
     "addr": "0x2ad63776f556156f2f43992368782aff9185e75e",
     "bal": 2102000,
-    "bal_usd": 24588,
+    "bal_usd": 24319,
     "bought": 2102000,
     "retention": 100,
     "buy_weeks": 18,
@@ -1111,7 +1111,7 @@
    {
     "addr": "0xc2ce0067c47636ce11a2c98bbb7b209865c07eab",
     "bal": 23811,
-    "bal_usd": 279,
+    "bal_usd": 275,
     "bought": 23811,
     "retention": 100,
     "buy_weeks": 18,
@@ -1123,7 +1123,7 @@
    {
     "addr": "0xd14459483943a6b9f0d48f8d1e0f2da54258f3fa",
     "bal": 282622,
-    "bal_usd": 3306,
+    "bal_usd": 3270,
     "bought": 369630,
     "retention": 76,
     "buy_weeks": 17,
@@ -1135,7 +1135,7 @@
    {
     "addr": "0x5aafc1f252d544f744d17a4e734afd6efc47ede4",
     "bal": 18987,
-    "bal_usd": 222,
+    "bal_usd": 220,
     "bought": 4136,
     "retention": 100,
     "buy_weeks": 16,
@@ -1147,7 +1147,7 @@
    {
     "addr": "0x8fab0bafef91f4817d10851dc86140ec010c8575",
     "bal": 250654,
-    "bal_usd": 2932,
+    "bal_usd": 2900,
     "bought": 234570,
     "retention": 100,
     "buy_weeks": 15,
