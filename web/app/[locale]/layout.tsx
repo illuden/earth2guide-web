@@ -1,6 +1,8 @@
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { Space_Grotesk, Manrope } from 'next/font/google'
+import Script from 'next/script'
 import { routing } from '@/i18n/routing'
 import type { Metadata } from 'next'
 import { Header } from '@/components/layout/Header'
@@ -8,7 +10,19 @@ import { JsonLd, siteGraph } from '@/components/seo/JsonLd'
 import { Footer } from '@/components/layout/Footer'
 import { ReferralBar } from '@/components/referral/ReferralBar'
 
-// static export: [locale] 전부 prerender
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+})
+
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
+  display: 'swap',
+})
+
+// static export: [locale] prerender
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }))
 }
@@ -52,20 +66,45 @@ export default async function LocaleLayout({
     notFound()
   }
 
-  // static rendering 활성화 (next-intl)
   setRequestLocale(locale)
 
   const messages = (await import(`@/messages/${locale}.json`)).default
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <JsonLd data={siteGraph(locale)} />
-      <Header />
-      <main className="flex-1 pt-16">
-        <ReferralBar />
-        {children}
-      </main>
-      <Footer locale={locale} />
-    </NextIntlClientProvider>
+    <html
+      lang={locale}
+      className={`${spaceGrotesk.variable} ${manrope.variable} dark`}
+    >
+      <head>
+        <link rel="license" href="https://earth2guide.com/ko/terms" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block"
+        />
+      </head>
+      <body className="min-h-screen flex flex-col bg-[#0e1322] text-[#dee1f7] antialiased">
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <JsonLd data={siteGraph(locale)} />
+          <Header />
+          <main className="flex-1 pt-16">
+            <ReferralBar />
+            {children}
+          </main>
+          <Footer locale={locale} />
+        </NextIntlClientProvider>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-F0PYH6DYLW"
+          strategy="afterInteractive"
+        />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-F0PYH6DYLW');
+          `}
+        </Script>
+      </body>
+    </html>
   )
 }

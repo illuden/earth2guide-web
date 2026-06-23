@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 
 interface PageProps { params: Promise<{ locale: string }> }
 
@@ -8,7 +9,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: isKo ? '개인정보 처리방침' : '隐私政策',
     robots: { index: false },
-    alternates: { canonical: `/${locale}/privacy` },
+    alternates: localeAlternates(locale, '/privacy'),
   }
 }
 

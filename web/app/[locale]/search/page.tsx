@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import { Suspense } from 'react'
 import type { Locale } from '@/lib/supabase/types'
 import { SearchClient } from '@/components/search/SearchClient'
@@ -11,7 +12,7 @@ interface PageProps {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'search' })
-  return { title: t('title') }
+  return { title: t('title'), alternates: localeAlternates(locale, '/search') }
 }
 
 export default async function SearchPage({ params }: PageProps) {

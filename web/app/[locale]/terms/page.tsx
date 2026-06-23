@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 
 interface PageProps { params: Promise<{ locale: string }> }
 
@@ -8,7 +9,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: isKo ? '이용약관' : '使用条款',
     robots: { index: false },
-    alternates: { canonical: `/${locale}/terms` },
+    alternates: localeAlternates(locale, '/terms'),
   }
 }
 

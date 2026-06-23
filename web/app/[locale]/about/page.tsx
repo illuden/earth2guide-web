@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import Link from 'next/link'
 import { JsonLd, ORG_ID } from '@/components/seo/JsonLd'
 
@@ -12,7 +13,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: isKo
       ? 'Earth2Guide(어스2 가이드)는 Earth 2 메타버스의 공식 발표와 가이드를 한국어·중국어로 정리하는 독립 정보 사이트입니다. 운영 방식, 출처 정책, 수익 고지를 안내합니다.'
       : 'Earth2Guide 是将 Earth 2 元宇宙官方公告与指南整理为中文·韩文的独立信息网站。',
-    alternates: { canonical: `/${locale}/about` },
+    alternates: localeAlternates(locale, '/about'),
   }
 }
 

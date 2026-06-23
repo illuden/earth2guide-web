@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import type { Locale } from '@/lib/supabase/types'
 import { getPostList } from '@/lib/content'
 import { PostListPaginated } from '@/components/news/PostListPaginated'
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: locale === 'ko'
       ? '어스2(Earth 2) 최신 뉴스·업데이트 — 공식 공지 한국어 번역과 E2V1 소식.'
       : 'Earth 2 最新资讯与更新 — 官方公告中文翻译与 E2V1 动态。',
+    alternates: localeAlternates(locale, '/news'),
   }
 }
 

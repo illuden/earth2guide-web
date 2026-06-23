@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import { setRequestLocale } from 'next-intl/server'
 import { JsonLd, faqLd, ORG_ID } from '@/components/seo/JsonLd'
 import data from '@/public/data/ess_onchain.json'
@@ -22,10 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     keywords: isKo
       ? ['ESS 온체인', 'Earth 2 Essence', 'ESS 소각', 'ESS 고래', 'ESS 출금', '어스2 에센스', 'ESS 가격', 'ESS 홀더', '$ESS']
       : ['ESS 链上', 'Earth 2 Essence', 'ESS 销毁', 'ESS 巨鲸', 'ESS 提现', 'Earth2 价格', '$ESS'],
-    alternates: {
-      canonical: `/${locale}/ess`,
-      languages: { ko: '/ko/ess', zh: '/zh/ess', 'x-default': '/ko/ess' },
-    },
+    alternates: localeAlternates(locale, '/ess'),
     openGraph: {
       title,
       description,

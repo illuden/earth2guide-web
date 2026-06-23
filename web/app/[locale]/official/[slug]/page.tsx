@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import { setRequestLocale } from 'next-intl/server'
 import type { Locale } from '@/lib/supabase/types'
 import { getPostSegment } from '@/lib/supabase/types'
@@ -32,13 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: post.title,
     description: post.summary ?? undefined,
-    alternates: {
-      canonical: `/${locale}/${getPostSegment(post.category)}/${slug}`,
-      languages: {
-        ko: `/ko/${getPostSegment(post.category)}/${slug}`,
-        zh: `/zh/${getPostSegment(post.category)}/${slug}`,
-      },
-    },
+    alternates: localeAlternates(locale, `/${getPostSegment(post.category)}/${slug}`),
     openGraph: {
       title: post.title,
       description: post.summary ?? undefined,

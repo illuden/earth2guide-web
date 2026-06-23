@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import type { Locale } from '@/lib/supabase/types'
 import { WIKI_CATEGORY_META } from '@/lib/supabase/types'
 import { getLatestPosts } from '@/lib/content'
@@ -24,10 +25,7 @@ export async function generateMetadata({
     description: isKo
       ? '어스2(Earth 2) 한국어 정보 허브 — 공식 공지 번역, 업데이트 뉴스, 가입·시작법·에센스·출금 위키 가이드.'
       : 'Earth 2 中文信息中心 — 官方公告翻译、更新资讯、注册入门与 Essence 提现百科指南。',
-    alternates: {
-      canonical: `/${locale}`,
-      languages: { ko: '/ko', zh: '/zh', 'x-default': '/ko' },
-    },
+    alternates: localeAlternates(locale),
     openGraph: {
       url: `/${locale}`,
       images: [{ url: '/og-default.png', width: 1200, height: 630, alt: 'Earth2Guide' }],

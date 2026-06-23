@@ -1,5 +1,6 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import type { Metadata } from 'next'
+import { localeAlternates } from '@/lib/seo'
 import type { Locale } from '@/lib/supabase/types'
 import { getLatestPosts } from '@/lib/content'
 import { OfficialTabs } from '@/components/official/OfficialTabs'
@@ -16,6 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description: locale === 'ko'
       ? '어스2(Earth 2) 공식 공지·뉴스·업데이트·홍보 모음 — 한국어 번역.'
       : 'Earth 2 官方公告、新闻、更新与活动汇总 — 中文翻译。',
+    alternates: localeAlternates(locale, '/official'),
   }
 }
 
